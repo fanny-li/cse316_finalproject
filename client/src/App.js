@@ -22,11 +22,11 @@ import {
   
   @author McKilla Gorilla
 */
-const App = () => {   
+const App = () => {
     return (
         <BrowserRouter>
             <AuthContextProvider>
-                <GlobalStoreContextProvider>              
+                <GlobalStoreContextProvider>
                     <AppBanner />
                     <Switch>
                         <Route path="/" exact component={HomeWrapper} />
