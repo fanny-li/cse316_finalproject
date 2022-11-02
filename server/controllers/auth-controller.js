@@ -37,16 +37,17 @@ loginUser = async (req, res) => {
 
         if (!email || !password) {
             return res
-                .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+                .status(200)
+                .json({ sucess: false, errorMessage: "Please enter all required fields." });
         }
 
         const existingUser = await User.findOne({ email: email });
         console.log("existingUser: " + existingUser);
         if (!existingUser) {
             return res
-                .status(401)
+                .status(200)
                 .json({
+                    success: false,
                     errorMessage: "Wrong email or password provided."
                 })
         }
@@ -56,8 +57,9 @@ loginUser = async (req, res) => {
         if (!passwordCorrect) {
             console.log("Incorrect password");
             return res
-                .status(401)
+                .status(200)
                 .json({
+                    sucess: false,
                     errorMessage: "Wrong email or password provided."
                 })
         }
@@ -100,22 +102,24 @@ registerUser = async (req, res) => {
         console.log("create user: " + firstName + " " + lastName + " " + email + " " + password + " " + passwordVerify);
         if (!firstName || !lastName || !email || !password || !passwordVerify) {
             return res
-                .status(400)
-                .json({ errorMessage: "Please enter all required fields." });
+                .status(200)
+                .json({ sucess: false, errorMessage: "Please enter all required fields." });
         }
         console.log("all fields provided");
         if (password.length < 8) {
             return res
-                .status(400)
+                .status(200)
                 .json({
+                    success: false,
                     errorMessage: "Please enter a password of at least 8 characters."
                 });
         }
         console.log("password long enough");
         if (password !== passwordVerify) {
             return res
-                .status(400)
+                .status(200)
                 .json({
+                    success: false,
                     errorMessage: "Please enter the same password twice."
                 })
         }
@@ -124,7 +128,7 @@ registerUser = async (req, res) => {
         console.log("existingUser: " + existingUser);
         if (existingUser) {
             return res
-                .status(400)
+                .status(200)
                 .json({
                     success: false,
                     errorMessage: "An account with this email address already exists."

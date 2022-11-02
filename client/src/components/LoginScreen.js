@@ -16,6 +16,8 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import MUIAlertModal from './MUIAlertModal';
+
 export default function LoginScreen() {
     const { auth } = useContext(AuthContext);
 
@@ -109,6 +111,7 @@ export default function LoginScreen() {
                         </Grid>
                         <Copyright sx={{ mt: 5 }} />
                     </Box>
+                    <MUIAlertModal />
                 </Box>
             </Grid>
         </Grid>

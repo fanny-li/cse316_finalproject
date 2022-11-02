@@ -39,7 +39,7 @@ const HomeScreen = () => {
     }
     return (
         <div id="playlist-selector">
-            <div id="list-selector-heading" onClick={() => console.log("oh")}>
+            <div id="list-selector-heading">
                 <Fab
                     color="primary"
                     aria-label="add"
