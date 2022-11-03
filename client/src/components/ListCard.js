@@ -80,7 +80,7 @@ function ListCard(props) {
             id={idNamePair._id}
             key={idNamePair._id}
             sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '48pt' }}
+            style={{ width: '100%', fontSize: '48pt', borderRadius: 10, border: "2px solid white", boxShadow: "5px 3px 3px #dbdbdb " }}
             button
             onClick={(event) => {
                 handleLoadList(event, idNamePair._id)

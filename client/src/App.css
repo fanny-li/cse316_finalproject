@@ -62,7 +62,7 @@ body {
   border-width: 2px;
   border-style: solid;
   border-radius: 10px;
-  padding-left: 10%;
+  /* padding-left: 10%; */
   padding-top: 5%;
   padding-bottom: 5%;
   height: 70%;
@@ -104,7 +104,7 @@ body {
   background-color: var(--swatch-primary);
 }
 
-#top5-workspace {
+#playlister-workspace {
   position: absolute;
   left: 0%;
   top: 10%;
@@ -113,7 +113,7 @@ body {
   background-color: var(--swatch-accent);
 }
 
-#top5-statusbar {
+#playlister-statusbar {
   position: absolute;
   left: 0%;
   top: 90%;
@@ -189,7 +189,7 @@ body {
 
 .list-card-button {
   float: right;
-  transform: scale(2);
+  transform: scale(1.2);
 }
 
 #workspace-home,
@@ -332,8 +332,25 @@ input {
   width: 20%;
 }
 
+.modal-button {
+  margin: 0 10px;
+  font-size: 20px;
+}
+
 .dialog-header {
   font-size: 24pt;
+  background-color: var(--swatch-accent);
+  color: white;
+}
+
+.modal-prompt {
+  font-size: 20px;
+}
+
+.modal-textfield {
+  border-radius: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 #close-modal-button {

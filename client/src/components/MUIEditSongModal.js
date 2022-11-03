@@ -51,17 +51,19 @@ export default function MUIEditSongModal() {
         <Modal
             open={store.editSong !== null}
         >
-            <Box sx={style}>
+            <Box>
                 <div
                     id="edit-song-modal"
                     className="modal is-visible"
-                    data-animation="slideInOutLeft">
+                    data-animation="slideInOutLeft"
+                >
                     <div
                         id='edit-song-root'
-                        className="modal-root">
+                        className="modal-dialog"
+                    >
                         <div
                             id="edit-song-modal-header"
-                            className="modal-north">Edit Song</div>
+                            className="dialog-header">Edit Song</div>
                         <div
                             id="edit-song-modal-content"
                             className="modal-center">
@@ -87,7 +89,7 @@ export default function MUIEditSongModal() {
                                 defaultValue={youTubeId}
                                 onChange={handleUpdateYouTubeId} />
                         </div>
-                        <div className="modal-south">
+                        <div className="modal-south" id="confirm-cancel-container">
                             <input
                                 type="button"
                                 id="edit-song-confirm-button"
