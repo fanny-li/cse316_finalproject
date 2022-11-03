@@ -100,6 +100,7 @@ export default function AppBanner() {
                         noWrap
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
+                        style={{ zIndex: 1 }}
                     >
                         <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                     </Typography>

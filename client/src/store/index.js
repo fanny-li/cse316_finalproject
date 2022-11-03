@@ -523,6 +523,7 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateCurrentList();
     }
     store.undo = function () {
+        console.log("ok")
         tps.undoTransaction();
     }
     store.redo = function () {
