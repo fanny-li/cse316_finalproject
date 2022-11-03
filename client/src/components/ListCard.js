@@ -57,7 +57,9 @@ function ListCard(props) {
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
-            store.changeListName(id, text);
+            if (text !== "") {
+                store.changeListName(id, text);
+            }
             toggleEdit();
         }
     }
@@ -87,14 +89,14 @@ function ListCard(props) {
             <Box sx={{ p: 1, flexGrow: 1 }}>{idNamePair.name}</Box>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={handleToggleEdit} aria-label='edit'>
-                    <EditIcon style={{fontSize:'48pt'}} />
+                    <EditIcon style={{ fontSize: '48pt' }} />
                 </IconButton>
             </Box>
             <Box sx={{ p: 1 }}>
                 <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete'>
-                    <DeleteIcon style={{fontSize:'48pt'}} />
+                    handleDeleteList(event, idNamePair._id)
+                }} aria-label='delete'>
+                    <DeleteIcon style={{ fontSize: '48pt' }} />
                 </IconButton>
             </Box>
         </ListItem>
@@ -113,8 +115,8 @@ function ListCard(props) {
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
                 defaultValue={idNamePair.name}
-                inputProps={{style: {fontSize: 48}}}
-                InputLabelProps={{style: {fontSize: 24}}}
+                inputProps={{ style: { fontSize: 48 } }}
+                InputLabelProps={{ style: { fontSize: 24 } }}
                 autoFocus
             />
     }

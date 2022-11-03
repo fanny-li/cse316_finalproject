@@ -78,7 +78,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: payload.idNamePairs,
-                    currentList: payload.playlist,
+                    currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -142,6 +142,20 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: payload.id,
                     listMarkedForDeletion: payload.playlist
                 });
+            }
+
+            case GlobalStoreActionType.DELETE_MARKED_LIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: store.idNamePairs,
+                    currentList: null,
+                    currentSongIndex: -1,
+                    currentSong: null,
+                    newListCounter: store.newListCounter - 1,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null
+                })
             }
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
@@ -264,6 +278,7 @@ function GlobalStoreContextProvider(props) {
             payload: {}
         });
         tps.clearAllTransactions();
+        history.push("/");
     }
 
     // THIS FUNCTION CREATES A NEW LIST
@@ -292,8 +307,10 @@ function GlobalStoreContextProvider(props) {
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
             const response = await api.getPlaylistPairs();
+            console.log(response);
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
@@ -327,7 +344,13 @@ function GlobalStoreContextProvider(props) {
         async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
             if (response.data.success) {
+                storeReducer({
+                    type: GlobalStoreActionType.DELETE_MARKED_LIST,
+                    payload: {}
+                });
+                console.log("after deletion");
                 store.loadIdNamePairs();
+
                 history.push("/");
             }
         }
