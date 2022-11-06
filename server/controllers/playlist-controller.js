@@ -26,6 +26,11 @@ createPlaylist = (req, res) => {
 
     User.findOne({ _id: req.userId }, (err, user) => {
         console.log("user found: " + JSON.stringify(user));
+        if (body.ownerEmail !== user.email) {
+            return res.status(400).json({
+                errorMessage: "Cannot access playlist that is not yours."
+            })
+        }
         user.playlists.push(playlist._id);
         user
             .save()
@@ -61,6 +66,7 @@ deletePlaylist = async (req, res) => {
             User.findOne({ email: list.ownerEmail }, (err, user) => {
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
+
                 if (user._id == req.userId) {
                     console.log("correct user!");
                     user.playlists.splice(req.params.id, 1);
