@@ -34,6 +34,10 @@ export default function AppBanner() {
         store.newListCounter = 0;
     }
 
+    const handleCloseList = () => {
+        store.closeCurrentList();
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -102,6 +106,7 @@ export default function AppBanner() {
                         component="div"
                         sx={{ display: { xs: 'none', sm: 'block' } }}
                         style={{ zIndex: 1 }}
+                        onClick={handleCloseList}
                     >
                         <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
                     </Typography>
