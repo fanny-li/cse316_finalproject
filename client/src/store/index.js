@@ -58,7 +58,8 @@ function GlobalStoreContextProvider(props) {
         listIdMarkedForDeletion: null,
         listMarkedForDeletion: null,
         songMarkedForDeletion: null,
-        editSong: null
+        editSong: null,
+        modalActive: false
     });
     const history = useHistory();
 
@@ -140,7 +141,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: payload.id,
-                    listMarkedForDeletion: payload.playlist
+                    listMarkedForDeletion: payload.playlist,
+                    modalActive: true
                 });
             }
 
@@ -154,7 +156,8 @@ function GlobalStoreContextProvider(props) {
                     newListCounter: store.newListCounter - 1,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null
+                    listMarkedForDeletion: null,
+                    modalActive: false
                 })
             }
             // UPDATE A LIST
@@ -197,7 +200,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    editSong: payload.currentSong
+                    editSong: payload.currentSong,
+                    modalActive: true
                 });
             }
             case GlobalStoreActionType.REMOVE_SONG: {
@@ -211,7 +215,8 @@ function GlobalStoreContextProvider(props) {
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
-                    songMarkedForDeletion: payload.currentSong
+                    songMarkedForDeletion: payload.currentSong,
+                    modalActive: true
                 });
             }
             case GlobalStoreActionType.HIDE_MODALS: {
@@ -226,7 +231,8 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     songMarkedForDeletion: null,
-                    editSong: null
+                    editSong: null,
+                    modalActive: false
                 });
             }
             default:

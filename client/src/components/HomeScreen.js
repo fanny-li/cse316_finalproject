@@ -38,11 +38,17 @@ const HomeScreen = () => {
                 }
             </List>;
     }
+
+    let addListStyling = "primary";
+
+    if (store.modalActive) {
+        addListStyling = "grey"
+    }
     return (
         <div id="playlist-selector">
             <div id="list-selector-heading">
                 <Fab
-                    color="primary"
+                    color={addListStyling}
                     aria-label="add"
                     id="add-list-button"
                     onClick={handleCreateNewList}

@@ -87,6 +87,18 @@ export default function AppBanner() {
         }
     }
 
+    let homeButtonStyling = {
+        "textDecoration": 'none',
+        "color": "white"
+    }
+
+    if (store.modalActive) {
+        homeButtonStyling = {
+            "textDecoration": 'none',
+            "color": "grey"
+        }
+    }
+
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
@@ -108,7 +120,7 @@ export default function AppBanner() {
                         style={{ zIndex: 1 }}
                         onClick={handleCloseList}
                     >
-                        <Link style={{ textDecoration: 'none', color: 'white' }} to='/'>⌂</Link>
+                        <Link style={homeButtonStyling} to='/'>⌂</Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
