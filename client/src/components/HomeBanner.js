@@ -22,7 +22,7 @@ const HomeBanner = () => {
                 <PersonOutlineOutlinedIcon className="homebanner-icons" style={{ fontSize: "30pt", margin: "7pt" }} onClick={handleUserLists} />
             </div>
             <div className='homebanner-item'>
-                <TextField fullWidth id="search-field" label="Search" variant="filled" style={{ background: "white", border: "1px solid black" }} />
+                <TextField fullWidth id="search-field" label="Search" variant="filled" style={{ background: "white" }} />
             </div>
             <div className='homebanner-item'>
                 <Typography variant="h5">Sort By</Typography>

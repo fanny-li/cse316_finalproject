@@ -3,8 +3,7 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
+
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import HomeBanner from './HomeBanner';
@@ -33,6 +32,7 @@ const HomeScreen = () => {
                             key={pair._id}
                             idNamePair={pair}
                             selected={false}
+                            isPublished={pair.published}
 
                         />
                     ))
@@ -40,30 +40,38 @@ const HomeScreen = () => {
             </List>;
     }
 
-    let addListStyling = "primary";
+    // let addListStyling = "primary";
 
-    if (store.modalActive) {
-        addListStyling = "grey"
-    }
+    // if (store.modalActive) {
+    //     addListStyling = "grey"
+    // }
     return (
         <div id="home-screen-root">
             <HomeBanner />
-            <div id="playlist-selector">
-                <div id="list-selector-heading">
-                    <Fab
-                        color={addListStyling}
-                        aria-label="add"
-                        id="add-list-button"
-                        onClick={handleCreateNewList}
-                    >
-                        <AddIcon />
-                    </Fab>
+            <div id="home-screen-items">
+                <div id="playlist-selector">
+                    {/* <div id="list-selector-heading">
+                        <Fab
+                            color={addListStyling}
+                            aria-label="add"
+                            id="add-list-button"
+                            onClick={handleCreateNewList}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </div> */}
+                    <div id="list-selector-list">
+                        {
+                            listCard
+                        }
+                        <MUIDeleteModal />
+                    </div>
                 </div>
-                <div id="list-selector-list">
-                    {
-                        listCard
-                    }
-                    <MUIDeleteModal />
+                <div id="youtube-section">
+                    <div id="player">
+
+                    </div>
+                    <div id="comments"></div>
                 </div>
             </div>
         </div>

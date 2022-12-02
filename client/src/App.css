@@ -86,7 +86,28 @@ body {
   justify-content: flex-end;
 }
 
-#edit-toolbar {
+#home-screen-items {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.list-card-items {
+  display: grid;
+  grid-template-columns: 4fr 2fr 1fr;
+}
+
+.list-card-item2 {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.list-card-item3 {
+  position: relative;
+  top: 40%;
+  left: 40%;
+}
+
+.list-card-item #edit-toolbar {
   background-color: transparent;
   float: right;
 }
@@ -106,7 +127,7 @@ body {
   top: 90%;
   width: 100%;
   height: 10%;
-  background-color: lightsalmon;
+
   display: flex;
   align-items: center;
   justify-content: center;
