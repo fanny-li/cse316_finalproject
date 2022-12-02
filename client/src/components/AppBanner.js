@@ -14,6 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
+
+
+
 export default function AppBanner() {
     const { auth } = useContext(AuthContext);
     const { store } = useContext(GlobalStoreContext);
@@ -38,7 +41,14 @@ export default function AppBanner() {
         store.closeCurrentList();
     }
 
+
+
     const menuId = 'primary-search-account-menu';
+    const menuItemStyle = {
+        backgroundColor: "#766BB8",
+        textDecoration: "none"
+    }
+
     const loggedOutMenu = (
         <Menu
             anchorEl={anchorEl}
@@ -54,11 +64,15 @@ export default function AppBanner() {
             }}
             open={isMenuOpen}
             onClose={handleMenuClose}
+
         >
-            <MenuItem onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
+
+            <MenuItem className="MenuItem" sx={menuItemStyle} onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
             <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-            <MenuItem><Link>Continue as Guest</Link></MenuItem>
+            <MenuItem ><Link>Continue as Guest</Link></MenuItem>
+
         </Menu>
+
     );
     const loggedInMenu =
         <Menu
@@ -90,7 +104,7 @@ export default function AppBanner() {
 
     let homeButtonStyling = {
         "textDecoration": 'none',
-        "color": "white"
+        // "color": "white"
     }
 
     if (store.modalActive) {
@@ -100,18 +114,27 @@ export default function AppBanner() {
         }
     }
 
+    const initialsStyle = {
+        zIndex: 1,
+        color: "black",
+        width: 30,
+        backgroundColor: "#BF40BF",
+        padding: 5,
+        border: "2pt solid black",
+        borderRadius: "80%"
+    }
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
         console.log("userInitials: " + userInitials);
         if (loggedIn)
-            return <div onClick={() => console.log("here")} style={{ zIndex: 1 }}>{userInitials}</div>;
+            return <div onClick={() => console.log("here")} style={initialsStyle}>{userInitials}</div>;
         else
             return <AccountCircle />;
     }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static">
+            <AppBar position="static" color='transparent'>
                 <Toolbar>
                     <Typography
                         variant="h4"
@@ -125,6 +148,7 @@ export default function AppBanner() {
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+
                         <IconButton
                             size="large"
                             edge="end"
@@ -132,10 +156,11 @@ export default function AppBanner() {
                             aria-controls={menuId}
                             aria-haspopup="true"
                             onClick={handleProfileMenuOpen}
-                            color="inherit"
+
                         >
                             {getAccountMenu(auth.loggedIn)}
                         </IconButton>
+
                     </Box>
                 </Toolbar>
             </AppBar>

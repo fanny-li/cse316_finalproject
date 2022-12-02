@@ -2,6 +2,7 @@ import AppBanner from './AppBanner'
 import EditToolbar from './EditToolbar'
 import HomeScreen from './HomeScreen'
 import HomeWrapper from './HomeWrapper'
+import HomeBanner from './HomeBanner'
 import ListCard from './ListCard'
 import LoginScreen from './LoginScreen'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -18,12 +19,13 @@ import WorkspaceScreen from './WorkspaceScreen'
     
     @author McKilla Gorilla
 */
-export { 
-    AppBanner,  
-    EditToolbar, 
+export {
+    AppBanner,
+    EditToolbar,
     HomeScreen,
     HomeWrapper,
-    ListCard, 
+    HomeBanner,
+    ListCard,
     LoginScreen,
     MUIDeleteModal,
     MUIEditSongModal,
@@ -31,5 +33,6 @@ export {
     SongCard,
     RegisterScreen,
     SplashScreen,
-    Statusbar, 
-    WorkspaceScreen }
+    Statusbar,
+    WorkspaceScreen
+}
