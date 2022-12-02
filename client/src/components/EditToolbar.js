@@ -12,8 +12,9 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
     
     @author McKilla Gorilla
 */
-function EditToolbar() {
+function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { idNamePair } = props;
 
     function handleAddNewSong() {
         store.addNewSong();
@@ -24,12 +25,32 @@ function EditToolbar() {
     function handleRedo() {
         store.redo();
     }
-    function handleClose() {
-        store.closeCurrentList();
+    function handlePublish() { }
+
+    async function handleDeleteList(event, id) {
+        event.stopPropagation();
+        store.markListForDeletion(id);
     }
+
     return (
         <div id="edit-toolbar">
-            <Button
+            <div className='list-card list-card-add' onClick={handleAddNewSong}>+</div>
+            <div id="edit-toolbar-buttons">
+
+
+                <div id="edit-toolbar-left">
+
+
+                    <button id='undo-button' className="edit-toolbar-button" onClick={handleUndo}>Undo</button>
+                    <button id='redo-button' className="edit-toolbar-button" onClick={handleRedo}>Redo</button>
+                </div>
+                <div id="edit-toolbar-right">
+                    <button id='publish-button' className="edit-toolbar-button" onClick={handlePublish}>Publish</button>
+                    <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
+                    <button id='duplicate-button' className="edit-toolbar-button" >Duplicate</button>
+                </div>
+            </div>
+            {/* <Button
                 disabled={!store.canAddNewSong()}
                 id='add-song-button'
                 onClick={handleAddNewSong}
@@ -56,7 +77,7 @@ function EditToolbar() {
                 onClick={handleClose}
                 variant="contained">
                     <CloseIcon />
-            </Button>
+            </Button> */}
         </div>
     )
 }

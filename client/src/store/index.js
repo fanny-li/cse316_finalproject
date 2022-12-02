@@ -135,7 +135,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -301,8 +301,10 @@ function GlobalStoreContextProvider(props) {
             }
             );
 
+            store.loadIdNamePairs();
+
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
+            history.push("/");
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");

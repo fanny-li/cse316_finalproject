@@ -19,9 +19,7 @@ const HomeScreen = () => {
         store.loadIdNamePairs();
     }, []);
 
-    function handleCreateNewList() {
-        store.createNewList();
-    }
+
     let listCard = "";
     if (store) {
         listCard =

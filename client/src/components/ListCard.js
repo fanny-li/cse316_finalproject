@@ -14,6 +14,7 @@ import SongCard from './SongCard';
 import MUIEditSongModal from './MUIEditSongModal';
 import MUIRemoveSongModal from './MUIRemoveSongModal';
 import { List } from '@mui/material';
+import EditToolbar from './EditToolbar';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -67,13 +68,6 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
-    async function handleDeleteList(event, id) {
-        event.stopPropagation();
-        let _id = event.target.id;
-        _id = ("" + _id).substring("delete-list-".length);
-        store.markListForDeletion(id);
-    }
-
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
@@ -92,7 +86,7 @@ function ListCard(props) {
         selectClass = "selected-list-card";
     }
 
-    let cardStatus = store.currentList ? "list-card-open" : "list-card-unopen";
+    let cardStatus = store.currentList ? (store.currentList._id == idNamePair._id ? "list-card-open" : "list-card-unopen") : "list-card-unopen";
 
     // List card how they look based on if they are published or not
     let cardElementDescription =
@@ -165,7 +159,7 @@ function ListCard(props) {
 
             songCards = <List
                 id="playlist-cards"
-                sx={{ width: '100%', bgcolor: 'background.paper' }}
+                sx={{ width: '100%' }}
             >
                 {store.currentList.songs.map((song, index) => (
                     <SongCard
@@ -176,6 +170,7 @@ function ListCard(props) {
                     />
                 ))
                 }
+                <EditToolbar idNamePair={idNamePair} />
                 {modalJSX}
             </List>
 
@@ -204,13 +199,7 @@ function ListCard(props) {
                             }
                         </IconButton>
                     </Box>
-                    <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => {
-                            handleDeleteList(event, idNamePair._id)
-                        }} aria-label='delete'>
-                            <DeleteIcon style={{ fontSize: '14pt' }} />
-                        </IconButton>
-                    </Box>
+
                 </Box>
             </Box>
         </ListItem>
