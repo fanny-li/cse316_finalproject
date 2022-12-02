@@ -7,8 +7,13 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowUpOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import SongCard from './SongCard';
+import MUIEditSongModal from './MUIEditSongModal';
+import MUIRemoveSongModal from './MUIRemoveSongModal';
+import { List } from '@mui/material';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -22,6 +27,18 @@ function ListCard(props) {
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
     const { idNamePair, selected, isPublished } = props;
+    const [songsActive, setSongsActive] = useState(false);
+
+    function toggleLoadSongs(event, id) {
+        let newActive = !songsActive;
+        if (newActive) {
+            handleLoadList(event, id);
+        }
+        else {
+            store.closeCurrentList();
+        }
+        setSongsActive(newActive);
+    }
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -74,11 +91,10 @@ function ListCard(props) {
     if (selected) {
         selectClass = "selected-list-card";
     }
-    let cardStatus = false;
-    if (store.isListNameEditActive) {
-        cardStatus = true;
-    }
 
+    let cardStatus = store.currentList ? "list-card-open" : "list-card-unopen";
+
+    // List card how they look based on if they are published or not
     let cardElementDescription =
         <Box className="list-card-item-1">
             <Box style={{ fontWeight: "bold" }}>
@@ -128,7 +144,44 @@ function ListCard(props) {
         }
     }
 
+    // put the song cards inside the list card div
 
+    let songCards = "";
+
+    if (songsActive) {
+        if (store.currentList == null) {
+            // store.history.push("/");
+            return null;
+        }
+        else {
+
+            let modalJSX = "";
+            if (store.isEditSongModalOpen()) {
+                modalJSX = <MUIEditSongModal />;
+            }
+            else if (store.isRemoveSongModalOpen()) {
+                modalJSX = <MUIRemoveSongModal />;
+            }
+
+            songCards = <List
+                id="playlist-cards"
+                sx={{ width: '100%', bgcolor: 'background.paper' }}
+            >
+                {store.currentList.songs.map((song, index) => (
+                    <SongCard
+                        id={'playlist-song-' + (index)}
+                        key={'playlist-song-' + (index)}
+                        index={index}
+                        song={song}
+                    />
+                ))
+                }
+                {modalJSX}
+            </List>
+
+        }
+
+    }
 
     let cardElement =
         <ListItem
@@ -139,23 +192,25 @@ function ListCard(props) {
             button
             onClick={handleClick}
         >
-            <Box sx={{ p: 1, flexGrow: 1 }} className="list-card-items">
+            <Box sx={{ p: 1, flexGrow: 1 }} className={cardStatus}>
                 {cardElementDescription}
 
                 {cardElementPublished}
+                {songCards}
                 <Box className="list-card-item3">
                     <Box sx={{ p: 1 }}>
-                        <IconButton onClick={(event) => { handleLoadList(event, idNamePair._id) }} aria-label='edit'>
-                            <KeyboardDoubleArrowDownIcon style={{ fontSize: '25pt' }} />
+                        <IconButton onClick={(event) => { toggleLoadSongs(event, idNamePair._id) }} aria-label='edit'>
+                            {songsActive ? <KeyboardDoubleArrowUpOutlinedIcon style={{ fontSize: '25pt' }} /> : <KeyboardDoubleArrowDownIcon style={{ fontSize: '25pt' }} />
+                            }
                         </IconButton>
                     </Box>
-                    {/* <Box sx={{ p: 1 }}>
+                    <Box sx={{ p: 1 }}>
                         <IconButton onClick={(event) => {
                             handleDeleteList(event, idNamePair._id)
                         }} aria-label='delete'>
-                            <DeleteIcon style={{ fontSize: '48pt' }} />
+                            <DeleteIcon style={{ fontSize: '14pt' }} />
                         </IconButton>
-                    </Box> */}
+                    </Box>
                 </Box>
             </Box>
         </ListItem>

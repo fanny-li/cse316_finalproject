@@ -57,8 +57,7 @@ function SongCard(props) {
             draggable="true"
             onClick={handleClick}
         >
-            {index + 1}.
-            <a
+            {index + 1}.   <a
                 id={'song-' + index + '-link'}
                 className="song-link"
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
@@ -70,6 +69,11 @@ function SongCard(props) {
                 className="list-card-button"
                 value={"\u2715"}
                 onClick={handleRemoveSong}
+                style={{
+                    background: "none",
+                    border: "none",
+                    color: "white",
+                }}
             />
         </div>
     );

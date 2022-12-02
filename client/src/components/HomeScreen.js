@@ -50,16 +50,6 @@ const HomeScreen = () => {
             <HomeBanner />
             <div id="home-screen-items">
                 <div id="playlist-selector">
-                    {/* <div id="list-selector-heading">
-                        <Fab
-                            color={addListStyling}
-                            aria-label="add"
-                            id="add-list-button"
-                            onClick={handleCreateNewList}
-                        >
-                            <AddIcon />
-                        </Fab>
-                    </div> */}
                     <div id="list-selector-list">
                         {
                             listCard

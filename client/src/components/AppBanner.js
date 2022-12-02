@@ -93,13 +93,13 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 
-    let editToolbar = "";
+    // let editToolbar = "";
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        if (store.currentList) {
-            editToolbar = <EditToolbar />;
-        }
+        // if (store.currentList) {
+        //     editToolbar = <EditToolbar />;
+        // }
     }
 
     let homeButtonStyling = {
@@ -146,7 +146,8 @@ export default function AppBanner() {
                     >
                         <Link style={homeButtonStyling} to='/'>⌂</Link>
                     </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                    <Box sx={{ flexGrow: 1 }}></Box>
+                    {/* <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box> */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
                         <IconButton
