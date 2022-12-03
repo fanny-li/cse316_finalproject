@@ -90,18 +90,18 @@ function ListCard(props) {
 
     // List card how they look based on if they are published or not
     let cardElementDescription =
-        <Box>
+        <Box style={{ marginTop: '8pt' }}>
             <Box style={{ fontWeight: "bold" }}>
                 {idNamePair.name}
             </Box>
-            <Box style={{ fontSize: "18pt" }}>
+            <Box style={{ fontSize: "15pt" }}>
                 By: <p style={{ display: "inline", color: "blue", textDecoration: "underline" }}>{auth.user.firstName} {auth.user.lastName}</p>
             </Box>
         </Box>
 
     let cardElementPublished = isPublished ?
         <Box className="list-card-item2">
-            <Box style={{ fontSize: '20pt' }}>
+            <Box style={{ fontSize: '15pt' }}>
                 <IconButton>
                     <ThumbUpOutlinedIcon />
                 </IconButton>
@@ -118,21 +118,23 @@ function ListCard(props) {
     let cardStyle =
     {
         width: '100%',
-        fontSize: '25pt',
+        fontSize: '18pt',
         borderRadius: 10,
         border: "2px solid black",
         boxShadow: "5px 3px 3px #dbdbdb",
-        background: "#FEFBEA"
+        background: "#FEFBEA",
+        // height: 'fit-content'
     }
 
     if (isPublished) {
         cardStyle = {
             width: '100%',
-            fontSize: '25pt',
+            fontSize: '18pt',
             borderRadius: 10,
             border: "2px solid black",
             boxShadow: "5px 3px 3px #dbdbdb",
-            background: "#BBBEFE"
+            background: "#BBBEFE",
+            // height: 'fit-content',
         }
     }
 
@@ -180,7 +182,7 @@ function ListCard(props) {
         <ListItem
             id={idNamePair._id}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
+            sx={{ marginBottom: '8px', display: 'flex' }}
             style={cardStyle}
             button
             onClick={handleClick}
@@ -199,7 +201,7 @@ function ListCard(props) {
                                 <Box>Published: <p style={{ color: "green", display: "inline" }}>{idNamePair.publishedDate}</p></Box>
                             </Box>
                             <Box>
-                                <Box>Published: <p style={{ color: "red", display: "inline" }}>{idNamePair.totalPlays}</p></Box>
+                                <Box>Listens: <p style={{ color: "red", display: "inline" }}>{idNamePair.totalPlays}</p></Box>
                             </Box>
                         </Box> : <div></div>}
 

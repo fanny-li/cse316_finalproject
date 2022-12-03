@@ -40,15 +40,18 @@ function EditToolbar(props) {
             <div className='list-card list-card-add' onClick={handleAddNewSong}>+</div>
             <div id="edit-toolbar-buttons">
 
+                {idNamePair.published ? <div id="edit-toolbar-left"></div> :
+                    <div id="edit-toolbar-left">
 
-                <div id="edit-toolbar-left">
 
+                        <button id='undo-button' className="edit-toolbar-button" onClick={handleUndo}>Undo</button>
+                        <button id='redo-button' className="edit-toolbar-button" onClick={handleRedo}>Redo</button>
 
-                    <button id='undo-button' className="edit-toolbar-button" onClick={handleUndo}>Undo</button>
-                    <button id='redo-button' className="edit-toolbar-button" onClick={handleRedo}>Redo</button>
-                </div>
+                    </div>
+                }
                 <div id="edit-toolbar-right">
-                    <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button>
+                    {!idNamePair.published ?
+                        <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button> : <div></div>}
                     <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
                     <button id='duplicate-button' className="edit-toolbar-button" >Duplicate</button>
                 </div>

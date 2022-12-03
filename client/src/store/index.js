@@ -473,7 +473,6 @@ function GlobalStoreContextProvider(props) {
                                         playlist: playlist
                                     }
                                 });
-
                             }
                         }
                         getListPairs(playlist);
@@ -483,7 +482,6 @@ function GlobalStoreContextProvider(props) {
             }
         }
         asyncPublishPlaylist(id);
-        store.closeCurrentList();
     }
     store.addNewSong = function () {
         let index = this.getPlaylistSize();
