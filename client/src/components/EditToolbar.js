@@ -14,10 +14,11 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
 */
 function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
-    const { idNamePair } = props;
+    const { idNamePair, handleClose } = props;
 
     function handleAddNewSong() {
         store.addNewSong();
+
     }
     function handleUndo() {
         store.undo();
@@ -28,11 +29,18 @@ function EditToolbar(props) {
     function handlePublish(event, id) {
         event.stopPropagation();
         store.publishPlaylist(id);
+        handleClose();
     }
 
     async function handleDeleteList(event, id) {
         event.stopPropagation();
         store.markListForDeletion(id);
+    }
+
+    function handleDuplicatePlaylist(event, id) {
+        event.stopPropagation();
+        handleClose();
+        store.duplicatePlaylist(id);
     }
 
     return (
@@ -53,37 +61,10 @@ function EditToolbar(props) {
                     {!idNamePair.published ?
                         <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button> : <div></div>}
                     <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
-                    <button id='duplicate-button' className="edit-toolbar-button" >Duplicate</button>
+                    <button id='duplicate-button' className="edit-toolbar-button" onClick={(event) => { handleDuplicatePlaylist(event, idNamePair._id) }} >Duplicate</button>
                 </div>
             </div>
-            {/* <Button
-                disabled={!store.canAddNewSong()}
-                id='add-song-button'
-                onClick={handleAddNewSong}
-                variant="contained">
-                <AddIcon />
-            </Button>
-            <Button 
-                disabled={!store.canUndo()}
-                id='undo-button'
-                onClick={handleUndo}
-                variant="contained">
-                    <UndoIcon />
-            </Button>
-            <Button 
-                disabled={!store.canRedo()}
-                id='redo-button'
-                onClick={handleRedo}
-                variant="contained">
-                    <RedoIcon />
-            </Button>
-            <Button 
-                disabled={!store.canClose()}
-                id='close-button'
-                onClick={handleClose}
-                variant="contained">
-                    <CloseIcon />
-            </Button> */}
+
         </div>
     )
 }

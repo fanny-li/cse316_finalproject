@@ -33,6 +33,7 @@ function ListCard(props) {
     function toggleLoadSongs(event, id) {
         let newActive = !songsActive;
         if (newActive) {
+
             handleLoadList(event, id);
         }
         else {
@@ -56,7 +57,7 @@ function ListCard(props) {
     }
 
     function handleClick(event) {
-        if (event.detail === 2) {
+        if (event.detail === 2 && !songsActive && !isPublished) {
             toggleEdit();
         }
     }
@@ -81,6 +82,14 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
+    function handleLikePlaylist(event, id) {
+        store.likePlaylist(id);
+    }
+
+    function handleDislikePlaylist(event, id) {
+        store.dislikePlaylist(id);
+    }
+
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
@@ -102,11 +111,11 @@ function ListCard(props) {
     let cardElementPublished = isPublished ?
         <Box className="list-card-item2">
             <Box style={{ fontSize: '15pt' }}>
-                <IconButton>
+                <IconButton onClick={(event) => { handleLikePlaylist(event, idNamePair._id) }}>
                     <ThumbUpOutlinedIcon />
                 </IconButton>
                 {idNamePair.likes}
-                <IconButton>
+                <IconButton onClick={(event) => { handleDislikePlaylist(event, idNamePair._id) }}>
                     <ThumbDownOutlinedIcon style={{ marginLeft: "30pt" }} />
                 </IconButton>
                 {idNamePair.dislikes}
@@ -170,7 +179,7 @@ function ListCard(props) {
                     />
                 ))
                 }
-                <EditToolbar idNamePair={idNamePair} />
+                <EditToolbar idNamePair={idNamePair} handleClose={toggleLoadSongs} />
                 {modalJSX}
             </List>
 
