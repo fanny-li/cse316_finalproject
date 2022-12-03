@@ -90,7 +90,7 @@ function ListCard(props) {
 
     // List card how they look based on if they are published or not
     let cardElementDescription =
-        <Box className="list-card-item-1">
+        <Box>
             <Box style={{ fontWeight: "bold" }}>
                 {idNamePair.name}
             </Box>
@@ -111,9 +111,7 @@ function ListCard(props) {
                 </IconButton>
                 {idNamePair.dislikes}
             </Box>
-            <Box style={{ fontSize: '18pt' }}>
-                Listens: {idNamePair.totalPlays}
-            </Box>
+
         </Box> : <div></div>
 
 
@@ -188,14 +186,26 @@ function ListCard(props) {
             onClick={handleClick}
         >
             <Box sx={{ p: 1, flexGrow: 1 }} className={cardStatus}>
-                {cardElementDescription}
+                <Box className="list-card-item1">
+                    {cardElementDescription}
 
-                {cardElementPublished}
+                    {cardElementPublished}
+                </Box>
                 {songCards}
                 <Box className="list-card-item3">
-                    <Box sx={{ p: 1 }}>
+                    {isPublished ?
+                        <Box style={{ fontSize: '13pt', display: "grid", gridTemplateColumns: "3fr 1fr" }}>
+                            <Box style={{}}>
+                                <Box>Published: <p style={{ color: "green", display: "inline" }}>{idNamePair.publishedDate}</p></Box>
+                            </Box>
+                            <Box>
+                                <Box>Published: <p style={{ color: "red", display: "inline" }}>{idNamePair.totalPlays}</p></Box>
+                            </Box>
+                        </Box> : <div></div>}
+
+                    <Box>
                         <IconButton onClick={(event) => { toggleLoadSongs(event, idNamePair._id) }} aria-label='edit'>
-                            {songsActive ? <KeyboardDoubleArrowUpOutlinedIcon style={{ fontSize: '25pt' }} /> : <KeyboardDoubleArrowDownIcon style={{ fontSize: '25pt' }} />
+                            {songsActive ? <KeyboardDoubleArrowUpOutlinedIcon style={{ fontSize: '22pt' }} /> : <KeyboardDoubleArrowDownIcon style={{ fontSize: '22pt' }} />
                             }
                         </IconButton>
                     </Box>

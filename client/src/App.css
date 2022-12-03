@@ -93,11 +93,15 @@ body {
 
 .list-card-unopen {
   display: grid;
-  grid-template-columns: 4fr 2fr 1fr;
 }
 
 .list-card-open {
   display: block;
+}
+
+.list-card-item1 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
 }
 
 .list-card-item2 {
@@ -106,10 +110,9 @@ body {
 }
 
 .list-card-item3 {
-  /* position: relative;
-  top: 40%;
-  left: 40%; */
-  float: right;
+  grid-column: 1/3;
+  display: grid;
+  grid-template-columns: 8fr 1fr;
 }
 
 .list-card-item #edit-toolbar {

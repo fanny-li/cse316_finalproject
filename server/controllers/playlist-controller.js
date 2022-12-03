@@ -172,6 +172,7 @@ getPlaylists = async (req, res) => {
     }).catch(err => console.log(err))
 }
 updatePlaylist = async (req, res) => {
+    console.log("hereeee");
     const body = req.body
     console.log("updatePlaylist: " + JSON.stringify(body));
     console.log("req.body.name: " + req.body.name);
@@ -201,8 +202,20 @@ updatePlaylist = async (req, res) => {
                     console.log("correct user!");
                     console.log("req.body.name: " + req.body.name);
 
+                    console.log("this is the list");
+                    console.log(list);
+                    console.log("this is the body");
+                    console.log(body.playlist);
+
                     list.name = body.playlist.name;
                     list.songs = body.playlist.songs;
+                    list.published = body.playlist.published;
+                    list.publishedDate = body.playlist.publishedDate;
+                    list.likes = body.playlist.likes;
+                    list.dislikes = body.playlist.dislikes;
+                    list.totalPlays = body.playlist.totalPlays;
+                    list.comments = body.playlist.comments;
+
                     list
                         .save()
                         .then(() => {

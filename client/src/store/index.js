@@ -28,6 +28,7 @@ export const GlobalStoreActionType = {
     MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    PUBLISH_PLAYLIST: "PUBLISH_PLAYLIST",
     EDIT_SONG: "EDIT_SONG",
     REMOVE_SONG: "REMOVE_SONG",
     HIDE_MODALS: "HIDE_MODALS"
@@ -59,7 +60,8 @@ function GlobalStoreContextProvider(props) {
         listMarkedForDeletion: null,
         songMarkedForDeletion: null,
         editSong: null,
-        modalActive: false
+        modalActive: false,
+        publishedPlaylists: []
     });
     const history = useHistory();
 
@@ -235,6 +237,23 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false
                 });
             }
+            case GlobalStoreActionType.PUBLISH_PLAYLIST: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: store.currentSongIndex,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    songMarkedForDeletion: null,
+                    editSong: null,
+                    modalActive: false,
+                    publishedPlaylists: payload.playlist
+                })
+            }
             default:
                 return store;
         }
@@ -304,7 +323,7 @@ function GlobalStoreContextProvider(props) {
             store.loadIdNamePairs();
 
             // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/");
+            history.push("/playlist/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -315,10 +334,8 @@ function GlobalStoreContextProvider(props) {
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
             const response = await api.getPlaylistPairs();
-            console.log(response);
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
-                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
@@ -356,7 +373,6 @@ function GlobalStoreContextProvider(props) {
                     type: GlobalStoreActionType.DELETE_MARKED_LIST,
                     payload: {}
                 });
-                console.log("after deletion");
                 store.loadIdNamePairs();
 
                 history.push("/");
@@ -402,7 +418,7 @@ function GlobalStoreContextProvider(props) {
     // THE FOLLOWING 8 FUNCTIONS ARE FOR COORDINATING THE UPDATING
     // OF A LIST, WHICH INCLUDES DEALING WITH THE TRANSACTION STACK. THE
     // FUNCTIONS ARE setCurrentList, addMoveItemTransaction, addUpdateItemTransaction,
-    // moveItem, updateItem, updateCurrentList, undo, and redo
+    // moveItem, updateItem, updateCurrentList, undo, redo, publish
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
             let response = await api.getPlaylistById(id);
@@ -415,7 +431,7 @@ function GlobalStoreContextProvider(props) {
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    // history.push("/playlist/" + playlist._id);
+                    history.push("/playlist/" + playlist._id);
                 }
             }
         }
@@ -424,6 +440,50 @@ function GlobalStoreContextProvider(props) {
 
     store.getPlaylistSize = function () {
         return store.currentList.songs.length;
+    }
+
+    // publish playlist
+    store.publishPlaylist = function (id) {
+        async function asyncPublishPlaylist(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                let playlist = response.data.playlist;
+                playlist.published = true;
+                let date = new Date();
+
+                let month = date.toLocaleString('default', { month: 'short' });
+                let day = date.getDate();
+                let year = date.getFullYear();
+
+                playlist.publishedDate = `${month} ${day}, ${year}`;
+                async function updateList(playlist) {
+                    console.log(playlist);
+                    console.log("here");
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        async function getListPairs(playlist) {
+                            response = await api.getPlaylistPairs();
+                            console.log(response);
+                            if (response.data.success) {
+                                let pairsArray = response.data.idNamePairs;
+                                storeReducer({
+                                    type: GlobalStoreActionType.PUBLISH_PLAYLIST,
+                                    payload: {
+                                        idNamePairs: pairsArray,
+                                        playlist: playlist
+                                    }
+                                });
+
+                            }
+                        }
+                        getListPairs(playlist);
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        asyncPublishPlaylist(id);
+        store.closeCurrentList();
     }
     store.addNewSong = function () {
         let index = this.getPlaylistSize();
@@ -531,7 +591,6 @@ function GlobalStoreContextProvider(props) {
         asyncUpdateCurrentList();
     }
     store.undo = function () {
-        console.log("ok")
         tps.undoTransaction();
     }
     store.redo = function () {

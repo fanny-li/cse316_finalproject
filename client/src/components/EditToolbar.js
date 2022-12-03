@@ -25,7 +25,10 @@ function EditToolbar(props) {
     function handleRedo() {
         store.redo();
     }
-    function handlePublish() { }
+    function handlePublish(event, id) {
+        event.stopPropagation();
+        store.publishPlaylist(id);
+    }
 
     async function handleDeleteList(event, id) {
         event.stopPropagation();
@@ -45,7 +48,7 @@ function EditToolbar(props) {
                     <button id='redo-button' className="edit-toolbar-button" onClick={handleRedo}>Redo</button>
                 </div>
                 <div id="edit-toolbar-right">
-                    <button id='publish-button' className="edit-toolbar-button" onClick={handlePublish}>Publish</button>
+                    <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button>
                     <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
                     <button id='duplicate-button' className="edit-toolbar-button" >Duplicate</button>
                 </div>
