@@ -68,6 +68,7 @@ function GlobalStoreContextProvider(props) {
         modalActive: false,
         publishedPlaylists: [],
         searchByType: null,
+        searchedText: null,
         searchedLists: []
     });
     const history = useHistory();
@@ -98,6 +99,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -115,6 +117,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
+                    searchedText: store.searchedText,
                     searchedLists: store.searchedLists
                 })
             }
@@ -132,6 +135,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
+                    searchedText: store.searchedText,
                     searchedLists: store.searchedLists
                 })
             }
@@ -149,6 +153,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -167,6 +172,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -185,6 +191,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -202,6 +209,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
+                    searchedText: store.searchedText,
                     searchedLists: store.searchedLists
                 });
             }
@@ -219,6 +227,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -238,6 +247,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -256,6 +266,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -275,6 +286,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 });
             }
@@ -294,6 +306,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: [...store.publishedPlaylists, payload.newPublished],
                     searchByType: null,
+                    searchedText: null,
                     searchedLists: []
                 })
             }
@@ -313,6 +326,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: payload,
+                    searchedText: null,
                     searchedLists: []
                 })
             }
@@ -332,7 +346,8 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
-                    searchedLists: payload,
+                    searchedText: payload.text,
+                    searchedLists: payload.list,
                 })
             }
             case GlobalStoreActionType.LIKE_PLAYLIST: {
@@ -351,6 +366,7 @@ function GlobalStoreContextProvider(props) {
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
+                    searchedText: store.searchedText,
                     searchedLists: payload.searchedLists
                 })
             }
@@ -724,7 +740,10 @@ function GlobalStoreContextProvider(props) {
                         if (filteredList !== []) {
                             storeReducer({
                                 type: GlobalStoreActionType.SEARCHED_LISTS,
-                                payload: filteredList
+                                payload: {
+                                    text: text,
+                                    list: filteredList
+                                }
                             })
                         }
                         else {
@@ -742,7 +761,10 @@ function GlobalStoreContextProvider(props) {
 
                     storeReducer({
                         type: GlobalStoreActionType.SEARCHED_LISTS,
-                        payload: filteredList
+                        payload: {
+                            text: text,
+                            list: filteredList
+                        }
                     })
                 }
 

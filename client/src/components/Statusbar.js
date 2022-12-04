@@ -21,6 +21,14 @@ function Statusbar() {
     let text = "";
     if (store.currentList)
         text = store.currentList.name;
+    else if (store.searchByType && store.searchedText) {
+        if (store.searchByType == "users") {
+            text = store.searchedText + " Lists";
+        }
+        else {
+            text = store.searchedText + " Playlists";
+        }
+    }
     else {
         text = "Your Lists"
     }
