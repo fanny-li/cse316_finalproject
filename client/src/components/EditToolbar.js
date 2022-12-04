@@ -45,7 +45,9 @@ function EditToolbar(props) {
 
     return (
         <div id="edit-toolbar">
-            <div className='list-card list-card-add' onClick={handleAddNewSong}>+</div>
+            {!idNamePair.published ?
+                <div className='list-card list-card-add' onClick={handleAddNewSong}>+</div> : null
+            }
             <div id="edit-toolbar-buttons">
 
                 {idNamePair.published ? <div id="edit-toolbar-left"></div> :

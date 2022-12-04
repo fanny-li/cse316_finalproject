@@ -4,7 +4,7 @@ import { GlobalStoreContext } from '../store'
 function SongCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [draggedTo, setDraggedTo] = useState(0);
-    const { song, index } = props;
+    const { song, index, isPublished } = props;
 
     function handleDragStart(event) {
         event.dataTransfer.setData("song", index);
@@ -43,18 +43,18 @@ function SongCard(props) {
         }
     }
 
-    let cardClass = "list-card unselected-list-card";
+    let cardClass = isPublished ? "song-card-published" : "list-card unselected-list-card";
     return (
         <div
             key={index}
             id={'song-' + index + '-card'}
             className={cardClass}
-            onDragStart={handleDragStart}
-            onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            draggable="true"
+            onDragStart={isPublished ? null : handleDragStart}
+            onDragOver={isPublished ? null : handleDragOver}
+            onDragEnter={isPublished ? null : handleDragEnter}
+            onDragLeave={isPublished ? null : handleDragLeave}
+            onDrop={isPublished ? null : handleDrop}
+            draggable={isPublished ? "false" : "true"}
             onClick={handleClick}
         >
             {index + 1}.   <a
@@ -63,19 +63,21 @@ function SongCard(props) {
                 href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
                 {song.title} by {song.artist}
             </a>
-            <input
-                type="button"
-                id={"remove-song-" + index}
-                className="list-card-button"
-                value={"\u2715"}
-                onClick={handleRemoveSong}
-                style={{
-                    background: "none",
-                    border: "none",
-                    color: "white",
-                    position: "relative",
-                }}
-            />
+            {!isPublished ?
+                <input
+                    type="button"
+                    id={"remove-song-" + index}
+                    className="list-card-button"
+                    value={"\u2715"}
+                    onClick={handleRemoveSong}
+                    style={{
+                        background: "none",
+                        border: "none",
+                        color: "white",
+                        position: "relative",
+                    }}
+                /> : <div></div>
+            }
         </div>
     );
 }

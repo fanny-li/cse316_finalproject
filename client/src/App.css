@@ -10,7 +10,7 @@
   --swatch-primary: #e6e6e6;
   --swatch-complement: #130684;
   --swatch-contrast: #9d96c9;
-  --swatch-accent: #669966;
+  --swatch-accent: #F1B301;
   --swatch-status: #123456;
   --font-primary: "Robaaaoto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
@@ -174,6 +174,7 @@ body {
   overflow-y: auto;
 }
 
+
 .list-card,
 .selected-list-card,
 .unselected-list-card {
@@ -187,7 +188,6 @@ body {
 .song-link {
   color: white;
   text-decoration: none;
-
 }
 
 /* .list-card:aria-disabled,
@@ -197,6 +197,30 @@ body {
   color: #666666;
   pointer-events: none;
 } */
+.song-card-container-unpublished {
+  max-height: 20vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.song-card-container-published {
+  background-color: var(--swatch-complement);
+  color: var(--swatch-accent);
+  border-radius: 10pt;
+  max-height: 20vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.song-card-published {
+  /* background-color: red; */
+  margin: 5pt 0pt 10pt 10pt;
+  width: fit-content;
+}
+
+.song-card-published>* {
+  color: var(--swatch-accent);
+}
 
 .unselected-list-card:hover {
   cursor: pointer;

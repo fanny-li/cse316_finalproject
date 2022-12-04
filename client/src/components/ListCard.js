@@ -27,17 +27,19 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState("");
-    const { idNamePair, selected, isPublished } = props;
+    const { idNamePair, isPublished } = props;
     const [songsActive, setSongsActive] = useState(false);
+    const [selected, setSelected] = useState(false);
 
     function toggleLoadSongs(event, id) {
         let newActive = !songsActive;
         if (newActive) {
-
             handleLoadList(event, id);
+            setSelected(true);
         }
         else {
             store.closeCurrentList();
+            setSelected(false);
         }
         setSongsActive(newActive);
     }
@@ -90,10 +92,7 @@ function ListCard(props) {
         store.dislikePlaylist(id);
     }
 
-    let selectClass = "unselected-list-card";
-    if (selected) {
-        selectClass = "selected-list-card";
-    }
+
 
     let cardStatus = store.currentList ? (store.currentList._id == idNamePair._id ? "list-card-open" : "list-card-unopen") : "list-card-unopen";
 
@@ -132,7 +131,6 @@ function ListCard(props) {
         border: "2px solid black",
         boxShadow: "5px 3px 3px #dbdbdb",
         background: "#FEFBEA",
-        // height: 'fit-content'
     }
 
     if (isPublished) {
@@ -143,7 +141,16 @@ function ListCard(props) {
             border: "2px solid black",
             boxShadow: "5px 3px 3px #dbdbdb",
             background: "#BBBEFE",
-            // height: 'fit-content',
+        }
+    }
+    if (selected && isPublished) {
+        cardStyle = {
+            width: '100%',
+            fontSize: '18pt',
+            borderRadius: 10,
+            border: "2px solid black",
+            boxShadow: "5px 3px 3px #dbdbdb",
+            background: "#F1B301",
         }
     }
 
@@ -166,22 +173,29 @@ function ListCard(props) {
                 modalJSX = <MUIRemoveSongModal />;
             }
 
-            songCards = <List
-                id="playlist-cards"
-                sx={{ width: '100%' }}
-            >
-                {store.currentList.songs.map((song, index) => (
-                    <SongCard
-                        id={'playlist-song-' + (index)}
-                        key={'playlist-song-' + (index)}
-                        index={index}
-                        song={song}
-                    />
-                ))
-                }
-                <EditToolbar idNamePair={idNamePair} handleClose={toggleLoadSongs} />
-                {modalJSX}
-            </List>
+            songCards =
+                <div>
+
+                    <List
+                        id="playlist-cards"
+                        sx={{ width: '100%' }}
+                        className={isPublished ? "song-card-container-published" : "song-card-container-unpublished"}
+                    >
+                        {store.currentList.songs.map((song, index) => (
+                            <SongCard
+                                id={'playlist-song-' + (index)}
+                                key={'playlist-song-' + (index)}
+                                index={index}
+                                song={song}
+                                isPublished={isPublished}
+                            />
+                        ))
+                        }
+
+                    </List>
+                    <EditToolbar idNamePair={idNamePair} handleClose={toggleLoadSongs} />
+                    {modalJSX}
+                </div>
 
         }
 

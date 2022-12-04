@@ -30,7 +30,7 @@ const HomeScreen = () => {
                         <ListCard
                             key={pair._id}
                             idNamePair={pair}
-                            selected={false}
+
                             isPublished={pair.published}
 
                         />
@@ -44,7 +44,7 @@ const HomeScreen = () => {
                             <ListCard
                                 key={pair._id}
                                 idNamePair={pair}
-                                selected={false}
+
                                 isPublished={pair.published}
 
                             />
@@ -53,11 +53,6 @@ const HomeScreen = () => {
                 </List>;
     }
 
-    // let addListStyling = "primary";
-
-    // if (store.modalActive) {
-    //     addListStyling = "grey"
-    // }
     return (
         <div id="home-screen-root">
             <HomeBanner
