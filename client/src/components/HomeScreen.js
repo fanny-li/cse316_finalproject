@@ -22,8 +22,7 @@ const HomeScreen = () => {
 
     let listCard = "";
     if (store) {
-        console.log("here: " + store.searchByType);
-        console.log(store.searchedLists);
+
         listCard =
             store.searchByType ? <List sx={{ width: '90%', left: '5%' }}>
                 {
