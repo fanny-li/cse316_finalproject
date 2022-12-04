@@ -22,10 +22,12 @@ const HomeScreen = () => {
 
     let listCard = "";
     if (store) {
+        console.log("here: " + store.searchByType);
+        console.log(store.searchedLists);
         listCard =
-            <List sx={{ width: '90%', left: '5%' }}>
+            store.searchByType === "allLists" ? <List sx={{ width: '90%', left: '5%' }}>
                 {
-                    store.idNamePairs.map((pair) => (
+                    store.searchedLists.map((pair) => (
                         <ListCard
                             key={pair._id}
                             idNamePair={pair}
@@ -35,7 +37,21 @@ const HomeScreen = () => {
                         />
                     ))
                 }
-            </List>;
+            </List>
+                :
+                <List sx={{ width: '90%', left: '5%' }}>
+                    {
+                        store.idNamePairs.map((pair) => (
+                            <ListCard
+                                key={pair._id}
+                                idNamePair={pair}
+                                selected={false}
+                                isPublished={pair.published}
+
+                            />
+                        ))
+                    }
+                </List>;
     }
 
     // let addListStyling = "primary";

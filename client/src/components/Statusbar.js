@@ -15,6 +15,7 @@ function Statusbar() {
 
     function handleCreateNewList() {
         store.createNewList();
+        console.log(store.newListCounter);
     }
 
     let text = "";

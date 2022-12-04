@@ -65,10 +65,7 @@ body {
   color: #DBD6F5
 }
 
-.MenuItem {
-  color: black;
-  text-align: center;
-}
+
 
 #homebanner {
   display: grid;
@@ -81,6 +78,9 @@ body {
   align-items: center;
 }
 
+.homebanner-icons {
+  color: black;
+}
 
 #homebanner div:last-child {
   justify-content: flex-end;

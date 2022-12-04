@@ -46,7 +46,12 @@ export default function AppBanner() {
     const menuId = 'primary-search-account-menu';
     const menuItemStyle = {
         backgroundColor: "#766BB8",
-        textDecoration: "none"
+        justifyContent: "center",
+        border: "1px solid white"
+    }
+    const menuItemTextStyle = {
+        color: "white",
+        textDecoration: "none",
     }
 
     const loggedOutMenu = (
@@ -67,9 +72,9 @@ export default function AppBanner() {
 
         >
 
-            <MenuItem className="MenuItem" sx={menuItemStyle} onClick={handleMenuClose}><Link to='/login/'>Login</Link></MenuItem>
-            <MenuItem onClick={handleMenuClose}><Link to='/register/'>Create New Account</Link></MenuItem>
-            <MenuItem ><Link>Continue as Guest</Link></MenuItem>
+            <MenuItem style={menuItemStyle} onClick={handleMenuClose}><Link style={menuItemTextStyle} to='/login/'>Login</Link></MenuItem>
+            <MenuItem style={menuItemStyle} onClick={handleMenuClose}><Link style={menuItemTextStyle} to='/register/'>Create New Account</Link></MenuItem>
+            <MenuItem style={menuItemStyle}><Link style={menuItemTextStyle}>Continue as Guest</Link></MenuItem>
 
         </Menu>
 
@@ -93,13 +98,9 @@ export default function AppBanner() {
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
 
-    // let editToolbar = "";
     let menu = loggedOutMenu;
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        // if (store.currentList) {
-        //     editToolbar = <EditToolbar />;
-        // }
     }
 
     let homeButtonStyling = {
@@ -121,7 +122,8 @@ export default function AppBanner() {
         backgroundColor: "#BF40BF",
         padding: 5,
         border: "2pt solid black",
-        borderRadius: "80%"
+        borderRadius: "80%",
+
     }
     function getAccountMenu(loggedIn) {
         let userInitials = auth.getUserInitials();
@@ -147,7 +149,6 @@ export default function AppBanner() {
                         <Link style={homeButtonStyling} to='/'>⌂</Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}></Box>
-                    {/* <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box> */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
 
                         <IconButton
