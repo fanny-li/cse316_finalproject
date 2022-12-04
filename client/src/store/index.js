@@ -97,7 +97,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -132,7 +132,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
-                    searchedLists: []
+                    searchedLists: store.searchedLists
                 })
             }
             // GET ALL THE LISTS SO WE CAN PRESENT THEM
@@ -166,7 +166,7 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: payload.playlist,
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -184,8 +184,9 @@ function GlobalStoreContextProvider(props) {
                     listMarkedForDeletion: null,
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: []
-                })
+                    searchByType: null,
+                    searchedLists: []
+                });
             }
             // UPDATE A LIST
             case GlobalStoreActionType.SET_CURRENT_LIST: {
@@ -217,7 +218,7 @@ function GlobalStoreContextProvider(props) {
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -236,7 +237,7 @@ function GlobalStoreContextProvider(props) {
                     editSong: payload.currentSong,
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -254,7 +255,7 @@ function GlobalStoreContextProvider(props) {
                     songMarkedForDeletion: payload.currentSong,
                     modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -273,7 +274,7 @@ function GlobalStoreContextProvider(props) {
                     editSong: null,
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 });
             }
@@ -292,7 +293,7 @@ function GlobalStoreContextProvider(props) {
                     editSong: null,
                     modalActive: false,
                     publishedPlaylists: [...store.publishedPlaylists, payload.newPublished],
-                    searchByType: store.searchByType,
+                    searchByType: null,
                     searchedLists: []
                 })
             }
@@ -433,6 +434,7 @@ function GlobalStoreContextProvider(props) {
             const response = await api.getPlaylistPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.LOAD_ID_NAME_PAIRS,
                     payload: pairsArray
@@ -596,6 +598,7 @@ function GlobalStoreContextProvider(props) {
                     }
                     );
 
+                    console.log("here");
                     store.loadIdNamePairs();
 
                     history.push("/");

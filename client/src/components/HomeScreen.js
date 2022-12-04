@@ -22,7 +22,7 @@ const HomeScreen = () => {
 
     let listCard = "";
     if (store) {
-
+        console.log("HERE: " + store.searchByType);
         listCard =
             store.searchByType ? <List sx={{ width: '90%', left: '5%' }}>
                 {
@@ -60,7 +60,8 @@ const HomeScreen = () => {
     // }
     return (
         <div id="home-screen-root">
-            <HomeBanner />
+            <HomeBanner
+                home={store.searchByType == null} />
             <div id="home-screen-items">
                 <div id="playlist-selector">
                     <div id="list-selector-list">

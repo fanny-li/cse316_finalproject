@@ -7,9 +7,10 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import SubjectIcon from '@mui/icons-material/Subject';
 
-const HomeBanner = () => {
+const HomeBanner = (props) => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(GlobalStoreContext);
+    const { home } = props;
     const [text, setText] = useState("");
     const [isHomeActive, setIsHomeActive] = useState(true);
     const [isAllListActive, setAllListActive] = useState(false);
@@ -77,13 +78,13 @@ const HomeBanner = () => {
         <div id="homebanner">
             <div className='homebanner-item' style={{ justifyContent: "center" }}>
                 <IconButton onClick={handleHome}>
-                    <HomeOutlinedIcon className="homebanner-icons" style={isHomeActive ? activeStyling : styling} />
+                    <HomeOutlinedIcon className="homebanner-icons" style={home || isHomeActive ? activeStyling : styling} />
                 </IconButton>
                 <IconButton onClick={(event) => { handleAllLists(event) }}>
-                    <GroupsOutlinedIcon className="homebanner-icons" style={isAllListActive ? activeStyling : styling} />
+                    <GroupsOutlinedIcon className="homebanner-icons" style={!home && isAllListActive ? activeStyling : styling} />
                 </IconButton>
                 <IconButton onClick={(event) => { handleUserLists(event) }}>
-                    <PersonOutlineOutlinedIcon className="homebanner-icons" style={isUserActive ? activeStyling : styling} />
+                    <PersonOutlineOutlinedIcon className="homebanner-icons" style={!home && isUserActive ? activeStyling : styling} />
                 </IconButton>
             </div>
             <div className='homebanner-item'>
