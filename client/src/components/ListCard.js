@@ -104,7 +104,7 @@ function ListCard(props) {
                 {idNamePair.name}
             </Box>
             <Box style={{ fontSize: "15pt" }}>
-                By: <p style={{ display: "inline", color: "blue", textDecoration: "underline" }}>{auth.user.userName}</p>
+                By: <p style={{ display: "inline", color: "blue", textDecoration: "underline" }}>{idNamePair.ownerUserName}</p>
             </Box>
         </Box>
 
