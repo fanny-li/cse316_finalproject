@@ -11,7 +11,7 @@ const HomeBanner = () => {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(GlobalStoreContext);
     const [text, setText] = useState("");
-    // const [isHomeActive, setIsHomeActive] = useState(false);
+    const [isHomeActive, setIsHomeActive] = useState(true);
     const [isAllListActive, setAllListActive] = useState(false);
     const [isUserActive, setUserActive] = useState(false);
     const [sortByActive, setSortByActive] = useState(false);
@@ -19,23 +19,30 @@ const HomeBanner = () => {
     const handleHome = () => {
         setAllListActive(false);
         setUserActive(false);
-
+        setIsHomeActive(true);
         store.loadIdNamePairs();
     }
     const handleAllLists = (event) => {
         event.stopPropagation();
         let newActive = !isAllListActive;
         setUserActive(false);
+        setIsHomeActive(false);
         if (newActive) {
             store.setSearchByType("allLists");
         }
         setAllListActive(newActive);
 
-        // store.loadEmpty();
     }
 
-    const handleUserLists = () => {
-
+    const handleUserLists = (event) => {
+        event.stopPropagation();
+        let newActive = !isAllListActive;
+        setAllListActive(false);
+        setIsHomeActive(false);
+        if (newActive) {
+            store.setSearchByType("users");
+        }
+        setUserActive(newActive);
     }
 
     const handleUpdateText = (event) => {
@@ -58,17 +65,25 @@ const HomeBanner = () => {
 
     const handleSort = (type) => { }
 
+
+    const styling = {
+        fontSize: '30pt'
+    }
+    const activeStyling = {
+        fontSize: '30pt',
+        color: 'purple'
+    }
     return (
         <div id="homebanner">
             <div className='homebanner-item' style={{ justifyContent: "center" }}>
                 <IconButton onClick={handleHome}>
-                    <HomeOutlinedIcon className="homebanner-icons" style={{ fontSize: "30pt" }} />
+                    <HomeOutlinedIcon className="homebanner-icons" style={isHomeActive ? activeStyling : styling} />
                 </IconButton>
                 <IconButton onClick={(event) => { handleAllLists(event) }}>
-                    <GroupsOutlinedIcon className="homebanner-icons" style={{ fontSize: "30pt" }} />
+                    <GroupsOutlinedIcon className="homebanner-icons" style={isAllListActive ? activeStyling : styling} />
                 </IconButton>
-                <IconButton onClick={handleUserLists}>
-                    <PersonOutlineOutlinedIcon className="homebanner-icons" style={{ fontSize: "30pt" }} />
+                <IconButton onClick={(event) => { handleUserLists(event) }}>
+                    <PersonOutlineOutlinedIcon className="homebanner-icons" style={isUserActive ? activeStyling : styling} />
                 </IconButton>
             </div>
             <div className='homebanner-item'>

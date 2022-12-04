@@ -9,7 +9,7 @@
   --swatch-foundation: #eeeedd;
   --swatch-primary: #e6e6e6;
   --swatch-complement: #130684;
-  --swatch-contrast: #d5c544;
+  --swatch-contrast: #9d96c9;
   --swatch-accent: #669966;
   --swatch-status: #123456;
   --font-primary: "Robaaaoto";
@@ -342,6 +342,12 @@ input {
   font-size: 1.5rem;
 }
 
+.modal-center {
+  background-color: var(--swatch-contrast);
+  font-size: 20pt;
+  font-weight: bold;
+}
+
 .modal p+p {
   margin-top: 1rem;
 }
@@ -354,12 +360,21 @@ input {
 .modal-button {
   margin: 0 10px;
   font-size: 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(198, 198, 198);
+}
+
+.modal-button:hover {
+  background-color: rgb(237, 237, 237);
 }
 
 .dialog-header {
   font-size: 24pt;
-  background-color: var(--swatch-accent);
+  background-color: var(--swatch-complement);
   color: white;
+  font-weight: bold;
 }
 
 .modal-prompt {
@@ -378,6 +393,7 @@ input {
 
 #confirm-cancel-container {
   text-align: center;
+  background-color: var(--swatch-contrast);
 }
 
 /* ANIMATIONS

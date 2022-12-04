@@ -10,9 +10,6 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
     p: 4,
 };
 
@@ -51,7 +48,7 @@ export default function MUIEditSongModal() {
         <Modal
             open={store.editSong !== null}
         >
-            <Box>
+            <Box sx={style}>
                 <div
                     id="edit-song-modal"
                     className="modal is-visible"
@@ -73,7 +70,8 @@ export default function MUIEditSongModal() {
                                 className='modal-textfield'
                                 type="text"
                                 defaultValue={title}
-                                onChange={handleUpdateTitle} />
+                                onChange={handleUpdateTitle}
+                            />
                             <div id="artist-prompt" className="modal-prompt">Artist:</div>
                             <input
                                 id="edit-song-modal-artist-textfield"

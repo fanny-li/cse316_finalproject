@@ -25,7 +25,7 @@ const HomeScreen = () => {
         console.log("here: " + store.searchByType);
         console.log(store.searchedLists);
         listCard =
-            store.searchByType === "allLists" ? <List sx={{ width: '90%', left: '5%' }}>
+            store.searchByType ? <List sx={{ width: '90%', left: '5%' }}>
                 {
                     store.searchedLists.map((pair) => (
                         <ListCard

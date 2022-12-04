@@ -73,6 +73,7 @@ function SongCard(props) {
                     background: "none",
                     border: "none",
                     color: "white",
+                    position: "relative",
                 }}
             />
         </div>

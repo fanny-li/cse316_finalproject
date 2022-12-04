@@ -388,7 +388,7 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, false, 0, 0, 0, 0, []);
+        const response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -570,7 +570,7 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
 
-                response = await api.createPlaylist(playlist.name, playlist.songs, auth.user.email, false, 0, 0, 0, 0, []);
+                response = await api.createPlaylist(playlist.name, playlist.songs, auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
                 if (response.status === 201) {
                     tps.clearAllTransactions();
                     let newList = response.data.playlist;
@@ -642,29 +642,44 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 console.log(response.data.data);
                 let playlists = response.data.data;
-                if (type === "allLists") {
-                    const filteredList = playlists.filter(playlist => {
-                        return playlist.name.includes(text);
+                if (text === "") {
+                    storeReducer({
+                        type: GlobalStoreActionType.SEARCHED_LISTS,
+                        payload: []
                     })
+                }
+                else if (type === "allLists") {
+                    if (text !== "") {
+                        const filteredList = playlists.filter(playlist => {
+                            return playlist.published && playlist.name.includes(text);
+                        })
+                        if (filteredList !== []) {
+                            storeReducer({
+                                type: GlobalStoreActionType.SEARCHED_LISTS,
+                                payload: filteredList
+                            })
+                        }
+                        else {
+                            storeReducer({
+                                type: GlobalStoreActionType.SEARCHED_LISTS,
+                                payload: []
+                            })
+                        }
+                    }
+                }
+                else if (type === "users") {
+                    const filteredList = playlists.filter(playlist => {
+                        return playlist.published && playlist.ownerUserName.includes(text);
+                    })
+
                     storeReducer({
                         type: GlobalStoreActionType.SEARCHED_LISTS,
                         payload: filteredList
                     })
-
-
-                    history.push("/");
-                    // store.loadSearchedList();
                 }
-                // else if (type === "users"){
-                //     const filteredList = playlists.filter(playlist => {
-                //         return playlist..includes(text);
-                //     })
 
-                //     storeReducer({
-                //         type: GlobalStoreActionType.SEARCHED_LISTS,
-                //         payload: filteredList
-                //     }) 
-                // }
+                history.push("/");
+
             }
         }
         asyncSearchFor(type, text);
