@@ -9,7 +9,7 @@
   --swatch-foundation: #eeeedd;
   --swatch-primary: #e6e6e6;
   --swatch-complement: #130684;
-  --swatch-contrast: #9d96c9;
+  --swatch-contrast: #c8c1f2;
   --swatch-accent: #F1B301;
   --swatch-status: #123456;
   --font-primary: "Robaaaoto";
@@ -318,6 +318,46 @@ input {
 
 .sort-menu-item>p {
   margin: 5pt;
+}
+
+#youtube-section {
+  height: fit-content;
+  margin: 0 25pt 0 8pt;
+}
+
+#youtube-section-selector {
+  font-weight: bold;
+  display: flex;
+}
+
+#youtube-section-selector>div {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 6pt 6pt 0 0;
+  width: 80pt;
+  text-align: center;
+  line-height: 0;
+}
+
+#youtube-section-bottom {
+  border: 1px solid black;
+  border-radius: 8pt;
+  background-color: var(--swatch-contrast);
+}
+
+#youtube-section-description {
+  font-weight: bold;
+  line-height: 5pt;
+  padding: 0 15pt;
+}
+
+#youtube-section-toolbar {
+  background-color: white;
+  margin: 0 15pt 10pt 15pt;
+  display: flex;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 10pt;
 }
 
 .disabled {

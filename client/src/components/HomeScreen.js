@@ -1,7 +1,8 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import YouTubePlaylister from './YouTubePlaylister'
 
 
 import List from '@mui/material/List';
@@ -14,6 +15,8 @@ import HomeBanner from './HomeBanner';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const [playerActive, setPlayerActive] = useState(false);
+    const [commentsActive, setCommentsActive] = useState(false);
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -66,11 +69,19 @@ const HomeScreen = () => {
                     </div>
                 </div>
                 <div id="youtube-section">
-                    <div id="player">
+                    <div id='youtube-section-selector'>
+                        <div>
+                            <p>Player</p>
+                        </div>
+                        <div>
+                            <p>Comments</p>
+                        </div>
 
                     </div>
-                    <div id="comments"></div>
+                    <YouTubePlaylister />
                 </div>
+
+
             </div>
         </div>
     )
