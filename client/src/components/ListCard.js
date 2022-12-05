@@ -58,8 +58,13 @@ function ListCard(props) {
         }
     }
 
-    function handleClick(event) {
-        if (event.detail === 2 && !songsActive && !isPublished) {
+    function handleClick(event, id) {
+        if (event.detail === 1) {
+
+
+            store.loadPlayer(idNamePair._id, 0);
+        }
+        else if (event.detail === 2 && !songsActive && !isPublished) {
             toggleEdit();
         }
     }
@@ -209,7 +214,7 @@ function ListCard(props) {
             sx={{ marginBottom: '8px', display: 'flex' }}
             style={cardStyle}
             button
-            onClick={handleClick}
+            onClick={(event) => { handleClick(event, (idNamePair._id)) }}
         >
             <Box sx={{ p: 1, flexGrow: 1 }} className={cardStatus}>
                 <Box className="list-card-item1">

@@ -15,14 +15,22 @@ import HomeBanner from './HomeBanner';
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
-    const [playerActive, setPlayerActive] = useState(false);
+    const [playerActive, setPlayerActive] = useState(true);
     const [commentsActive, setCommentsActive] = useState(false);
 
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
 
+    function loadPlayerSection(event) {
+        setPlayerActive(true);
+        setCommentsActive(false);
+    }
 
+    function loadCommentsSection(event) {
+        setPlayerActive(false);
+        setCommentsActive(true);
+    }
     let listCard = "";
     if (store) {
         listCard =
@@ -46,7 +54,6 @@ const HomeScreen = () => {
                             <ListCard
                                 key={pair._id}
                                 idNamePair={pair}
-
                                 isPublished={pair.published}
 
                             />
@@ -70,10 +77,10 @@ const HomeScreen = () => {
                 </div>
                 <div id="youtube-section">
                     <div id='youtube-section-selector'>
-                        <div>
+                        <div onClick={loadPlayerSection} style={playerActive ? { backgroundColor: "white" } : { backgroundColor: "#DADADA" }}>
                             <p>Player</p>
                         </div>
-                        <div>
+                        <div onClick={loadCommentsSection} style={commentsActive ? { backgroundColor: "white" } : { backgroundColor: "#DADADA" }}>
                             <p>Comments</p>
                         </div>
 
