@@ -76,6 +76,7 @@ function ListCard(props) {
             let id = event.target.id.substring("list-".length);
             if (text !== "") {
                 store.changeListName(id, text);
+
             }
             toggleEdit();
         }

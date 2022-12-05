@@ -1,4 +1,4 @@
-import { IconButton, TextField, textFieldClasses, Toolbar, Typography } from '@mui/material';
+import { Icon, IconButton, TextField, textFieldClasses, Toolbar, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useContext, useState } from 'react';
 import GlobalStoreContext from '../store';
@@ -6,6 +6,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import SubjectIcon from '@mui/icons-material/Subject';
+
 
 const HomeBanner = (props) => {
     const { store } = useContext(GlobalStoreContext);
@@ -15,7 +16,7 @@ const HomeBanner = (props) => {
     const [isHomeActive, setIsHomeActive] = useState(true);
     const [isAllListActive, setAllListActive] = useState(false);
     const [isUserActive, setUserActive] = useState(false);
-    const [sortByActive, setSortByActive] = useState(false);
+    const [isMenuOpen, setMenuOpen] = useState(false);
 
     const handleHome = () => {
         setAllListActive(false);
@@ -61,10 +62,15 @@ const HomeBanner = (props) => {
     }
 
     const toggleSortByMenu = (event) => {
-
+        setMenuOpen(!isMenuOpen);
     }
 
-    const handleSort = (type) => { }
+    const handleSort = (event, type) => {
+        event.stopPropagation();
+        console.log(type);
+        store.sortPlaylist(type);
+        toggleSortByMenu();
+    }
 
 
     const styling = {
@@ -74,6 +80,24 @@ const HomeBanner = (props) => {
         fontSize: '30pt',
         color: 'purple'
     }
+
+    const sortMenu = <div id="sort-menu">
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "name")}>
+            <p>Name (A - Z)</p>
+        </div>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "publishedDate")}>
+            <p>Published Date (Newest)</p>
+        </div>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "listens")}>
+            <p>Listens (High - Low)</p>
+        </div>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "likes")}>
+            <p>Likes (High - Low)</p>
+        </div>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "dislikes")}>
+            <p>Dislikes (High - Low)</p>
+        </div>
+    </div>
     return (
         <div id="homebanner">
             <div className='homebanner-item' style={{ justifyContent: "center" }}>
@@ -99,8 +123,11 @@ const HomeBanner = (props) => {
                 />
             </div>
             <div className='homebanner-item'>
-                <Typography variant="h5">Sort By</Typography>
-                <SubjectIcon style={{ fontSize: "30pt" }} />
+                <Typography variant="h6">Sort By</Typography>
+                <IconButton onClick={toggleSortByMenu}>
+                    <SubjectIcon style={{ fontSize: "25pt" }} />
+                </IconButton>
+                {isMenuOpen ? sortMenu : null}
             </div>
         </div>
     )

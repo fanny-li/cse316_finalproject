@@ -88,7 +88,7 @@ body {
 
 #home-screen-items {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
 }
 
 .list-card-unopen {
@@ -298,6 +298,27 @@ input {
   font-size: 20pt;
 }
 
+#sort-menu {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  top: 15%;
+  cursor: pointer;
+}
+
+.sort-menu-item:hover {
+  color: var(--swatch-contrast);
+}
+
+.sort-menu-item {
+  font-weight: bold;
+  border: 1px solid black;
+}
+
+.sort-menu-item>p {
+  margin: 5pt;
+}
 
 .disabled {
   background-color: lightgray;
