@@ -42,8 +42,6 @@ export default function YouTubePlaylister() {
     function loadAndPlayCurrentSong(player) {
         let song = playlist[currentSong];
         player.loadVideoById(song);
-        console.log("here");
-        console.log(store.currentList);
         player.playVideo();
     }
 

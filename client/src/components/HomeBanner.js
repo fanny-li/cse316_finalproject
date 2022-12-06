@@ -66,9 +66,7 @@ const HomeBanner = (props) => {
     }
 
     const handleSort = (event, type) => {
-        event.stopPropagation();
-        console.log(type);
-        store.sortPlaylist(type);
+        store.sortPlaylist(type, [], store.searchedLists, null);
         toggleSortByMenu();
     }
 
@@ -82,22 +80,36 @@ const HomeBanner = (props) => {
     }
 
     const sortMenu = <div id="sort-menu">
-        <div className='sort-menu-item' onClick={(event) => handleSort(event, "name")}>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "BY_NAME")}>
             <p>Name (A - Z)</p>
         </div>
-        <div className='sort-menu-item' onClick={(event) => handleSort(event, "publishedDate")}>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "BY_PUBLISH_DATE")}>
             <p>Published Date (Newest)</p>
         </div>
-        <div className='sort-menu-item' onClick={(event) => handleSort(event, "listens")}>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "BY_LISTENS")}>
             <p>Listens (High - Low)</p>
         </div>
-        <div className='sort-menu-item' onClick={(event) => handleSort(event, "likes")}>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "BY_LIKES")}>
             <p>Likes (High - Low)</p>
         </div>
-        <div className='sort-menu-item' onClick={(event) => handleSort(event, "dislikes")}>
+        <div className='sort-menu-item' onClick={(event) => handleSort(event, "BY_DISLIKES")}>
             <p>Dislikes (High - Low)</p>
         </div>
     </div>
+
+    const sortMenuHome = <div id="sort-menu">
+        <div className="sort-menu-item" onClick={(event) => handleSort(event, "BY_CREATION_DATE")}>
+            <p>By Creation Date (Old - New)</p>
+        </div>
+        <div className="sort-menu-item" onClick={(event) => handleSort(event, "BY_EDIT_DATE")}>
+            <p>By Last Edit date (New - Old)</p>
+        </div>
+        <div className="sort-menu-item" onClick={(event) => handleSort(event, "BY_NAME")}>
+
+            <p>By Name (A - Z)</p>
+        </div>
+    </div>
+
     return (
         <div id="homebanner">
             <div className='homebanner-item' style={{ justifyContent: "center" }}>
@@ -127,7 +139,7 @@ const HomeBanner = (props) => {
                 <IconButton onClick={toggleSortByMenu}>
                     <SubjectIcon style={{ fontSize: "25pt" }} />
                 </IconButton>
-                {isMenuOpen ? sortMenu : null}
+                {isMenuOpen ? (isHomeActive ? sortMenuHome : sortMenu) : null}
             </div>
         </div>
     )
