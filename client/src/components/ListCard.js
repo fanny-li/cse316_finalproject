@@ -155,7 +155,7 @@ function ListCard(props) {
             borderRadius: 10,
             border: "2px solid black",
             boxShadow: "5px 3px 3px #dbdbdb",
-            background: "#F1B301",
+            background: "#d598c0",
         }
     }
 

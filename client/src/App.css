@@ -10,7 +10,7 @@
   --swatch-primary: #e6e6e6;
   --swatch-complement: #130684;
   --swatch-contrast: #c8c1f2;
-  --swatch-accent: #F1B301;
+  --swatch-accent: #d598c0;
   --swatch-status: #123456;
   --font-primary: "Robaaaoto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
@@ -337,6 +337,7 @@ input {
   width: 80pt;
   text-align: center;
   line-height: 0;
+  height: 25pt;
   cursor: pointer;
 }
 
@@ -359,6 +360,49 @@ input {
   justify-content: center;
   border: 1px solid black;
   border-radius: 10pt;
+}
+
+#comments-section {
+  background-color: var(--swatch-contrast);
+  height: 50vh;
+  border: 1px solid black;
+  border-radius: 6pt;
+  transform: translateY(-5px);
+}
+
+#comments {
+  max-height: 45vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+#comment-card {
+  background-color: var(--swatch-accent);
+  line-height: 0.5;
+  margin: 0 10pt 5pt 10pt;
+  border: 1px solid black;
+  border-radius: 6pt;
+}
+
+#comment-card-item {
+  margin: 10pt 10pt 0 10pt;
+}
+
+#add-comment-section {
+  margin: 10pt;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#comment-search-field {
+  background-color: white;
+  font-size: 15pt;
+  width: 100%;
+  /* padding: 2pt 25pt; */
+  color: rgb(113, 102, 145);
+  font-family: var(--font-primary);
+  border-radius: 4pt;
 }
 
 .disabled {

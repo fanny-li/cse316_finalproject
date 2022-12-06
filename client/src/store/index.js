@@ -36,7 +36,8 @@ export const GlobalStoreActionType = {
     SEARCHED_LISTS: "SEARCHED_LISTS",
     LIKE_PLAYLIST: "LIKE_PLAYLIST",
     SORT_BY: "SORT_BY",
-    LOAD_PLAYER: "LOAD_PLAYER"
+    LOAD_PLAYER: "LOAD_PLAYER",
+    ADD_COMMENT: "ADD_COMMENT"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -81,7 +82,8 @@ function GlobalStoreContextProvider(props) {
         searchByType: null,
         searchedText: null,
         searchedLists: [],
-        sortBy: SortBy.NONE
+        sortBy: SortBy.NONE,
+        comments: []
     });
     const history = useHistory();
 
@@ -113,7 +115,7 @@ function GlobalStoreContextProvider(props) {
                     searchByType: null,
                     searchedText: null,
                     searchedLists: [],
-                    sortBy: store.sortBy
+                    sortBy: store.sortBy,
                 });
             }
             // STOP EDITING THE CURRENT LIST
@@ -926,6 +928,28 @@ function GlobalStoreContextProvider(props) {
         asyncLoadPlayer(id, index);
     }
 
+    store.addComment = function (user, description) {
+        async function asyncAddComment(user, description) {
+            let comments = store.currentList.comments;
+            comments.push({
+                user: user,
+                description: description
+            })
+
+            console.log(store.currentList.comments);
+            let playlist = store.currentList;
+
+            console.log(playlist);
+
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success) {
+                store.updateCurrentList();
+            }
+
+
+        }
+        asyncAddComment(user, description);
+    }
 
     store.addNewSong = function () {
         let index = this.getPlaylistSize();
