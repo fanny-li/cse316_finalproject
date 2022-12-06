@@ -659,6 +659,7 @@ function GlobalStoreContextProvider(props) {
                                         playlist: playlist
                                     }
                                 });
+
                             }
                         }
                         getListPairs(playlist);

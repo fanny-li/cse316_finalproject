@@ -389,7 +389,7 @@ input {
 }
 
 #add-comment-section {
-  margin: 10pt;
+  margin: 5pt 10pt;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -407,6 +407,7 @@ input {
 
 .disabled {
   background-color: lightgray;
+  cursor: not-allowed;
 }
 
 .disabled:hover {

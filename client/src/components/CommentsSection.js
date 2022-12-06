@@ -34,14 +34,16 @@ const CommentsSection = () => {
                 </List>
         }
     }
+
+
     return (
         <div id="comments-section">
             <div id="comments">
                 {commentCard}
             </div>
             <div id="add-comment-section">
-                <div style={{ width: "100%" }}>
-                    <input type="text" name="comments" id="comment-search-field" placeholder="Add Comment" ref={ref} onChange={handleUpdateText} onKeyDown={handleAddComment} disabled={store.currentList ? false : true} />
+                <div style={{ width: "100%" }} >
+                    <input type="text" name="comments" id="comment-search-field" className={store.currentList && store.currentList.published ? "" : "disabled"} placeholder="Add Comment" ref={ref} onChange={handleUpdateText} onKeyDown={handleAddComment} disabled={store.currentList && store.currentList.published ? false : true} />
                 </div>
             </div>
         </div>

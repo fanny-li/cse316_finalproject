@@ -13,7 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
+import Logo from '../images/Logo.png';
 
 
 
@@ -104,8 +104,8 @@ export default function AppBanner() {
     }
 
     let homeButtonStyling = {
-        "textDecoration": 'none',
-        // "color": "white"
+
+        display: "flex"
     }
 
     if (store.modalActive) {
@@ -136,7 +136,7 @@ export default function AppBanner() {
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" color='transparent'>
+            <AppBar position="static" color=''>
                 <Toolbar>
                     <Typography
                         variant="h4"
@@ -146,7 +146,9 @@ export default function AppBanner() {
                         style={{ zIndex: 1 }}
                         onClick={handleCloseList}
                     >
-                        <Link style={homeButtonStyling} to='/'>⌂</Link>
+                        <Link style={homeButtonStyling} to='/'>
+                            <img src={Logo} alt='logo' width={150} />
+                        </Link>
                     </Typography>
                     <Box sx={{ flexGrow: 1 }}></Box>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>

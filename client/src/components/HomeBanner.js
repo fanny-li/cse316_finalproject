@@ -22,6 +22,7 @@ const HomeBanner = (props) => {
         setAllListActive(false);
         setUserActive(false);
         setIsHomeActive(true);
+        console.log(store.currentList);
         store.loadIdNamePairs();
     }
     const handleAllLists = (event) => {
@@ -53,7 +54,6 @@ const HomeBanner = (props) => {
 
     const handleKeyPress = (event) => {
         if (event.code === "Enter") {
-            console.log("here");
             if (isUserActive || isAllListActive) {
                 let type = isAllListActive ? "allLists" : "users";
                 store.searchFor(type, text);
