@@ -9,7 +9,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 500,
 
     p: 4,
 };
@@ -28,6 +28,7 @@ export default function MUIRemoveSongModal() {
     let modalClass = "modal";
     if (store.isRemoveSongModalOpen()) {
         modalClass += " is-visible";
+        console.log("here");
     }
     let songTitle = "";
     if (store.currentSong) {

@@ -39,7 +39,9 @@ function EditToolbar(props) {
 
     function handleDuplicatePlaylist(event, id) {
         event.stopPropagation();
+        console.log("here");
         handleClose();
+        console.log("here2");
         store.duplicatePlaylist(id);
     }
 

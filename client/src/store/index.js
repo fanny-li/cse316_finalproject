@@ -926,16 +926,6 @@ function GlobalStoreContextProvider(props) {
         asyncLoadPlayer(id, index);
     }
 
-    store.incSong = function () {
-        storeReducer({
-            type: GlobalStoreActionType.LOAD_PLAYER,
-            payload: {
-                playlist: store.currentList,
-                index: store.currentSongIndex + 1,
-                song: store.currentSong
-            }
-        })
-    }
 
     store.addNewSong = function () {
         let index = this.getPlaylistSize();

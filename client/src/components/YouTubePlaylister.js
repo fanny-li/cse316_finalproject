@@ -14,13 +14,13 @@ export default function YouTubePlaylister() {
     // FROM ONE SONG TO THE NEXT
 
     const { store } = useContext(GlobalStoreContext);
-    const [songTitle, setSongTitle] = useState("");
+    const [player, setPlayer] = useState(null);
+    const [songTitle, setSongTitle] = useState();
     const [songArtist, setSongArtist] = useState("");
     const [songIndex, setSongIndex] = useState(0);
 
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
-    let target = null;
-    let list = store.currentList ? store.currentList.name : "";
+    let list = store.currentList ? store.currentList : "";
     let playlist = store.currentList ? store.currentList.songs.map((key) => { return key.youTubeId }) : [];
     let currentSong = store.currentList ? store.currentSongIndex : -1;
 
@@ -42,41 +42,48 @@ export default function YouTubePlaylister() {
     function loadAndPlayCurrentSong(player) {
         let song = playlist[currentSong];
         player.loadVideoById(song);
+        console.log("here");
+        console.log(store.currentList);
         player.playVideo();
-
     }
 
     function playSong() {
-        target.playVideo();
+        player.playVideo();
     }
     // THIS FUNCTION INCREMENTS THE PLAYLIST SONG TO THE NEXT ONE
     function incSong() {
+        currentSong = songIndex;
         currentSong++;
-        currentSong = currentSong % playlist.length;
-        console.log(currentSong);
-        loadAndPlayCurrentSong(target);
-        // store.incSong();
+        if (currentSong == playlist.length) {
+            currentSong = 0;
+        }
+        setSongIndex(currentSong);
+        setSongTitle(list.songs[currentSong].title);
+        setSongArtist(list.songs[currentSong].artist);
+        loadAndPlayCurrentSong(player);
     }
 
     // THIS FUNCTION DECREMENTS THE PLAYLIST SONG TO THE PREVIOUS ONE
     function decSong() {
-        if (currentSong === 0) {
-            currentSong += playlist.length - 1;
+        currentSong = songIndex;
+        currentSong--;
+        if (currentSong < 0) {
+            currentSong = playlist.length - 1;
         }
-        else {
-            currentSong--;
-        }
-        currentSong = currentSong % playlist.length;
-        loadAndPlayCurrentSong(target);
+        setSongIndex(currentSong);
+        setSongTitle(list.songs[currentSong].title);
+        setSongArtist(list.songs[currentSong].artist);
+        loadAndPlayCurrentSong(player);
     }
 
     function stopVideo() {
-        target.pauseVideo();
+        player.pauseVideo();
     }
     function onPlayerReady(event) {
-        target = event.target;
+        setPlayer(event.target);
         loadAndPlayCurrentSong(event.target);
         event.target.playVideo();
+
     }
 
     // THIS IS OUR EVENT HANDLER FOR WHEN THE YOUTUBE PLAYER'S STATE
@@ -93,7 +100,7 @@ export default function YouTubePlaylister() {
             // THE VIDEO HAS COMPLETED PLAYING
             console.log("0 Video ended");
             incSong();
-
+            // player.nextVideo();
             loadAndPlayCurrentSong(player);
         } else if (playerStatus === 1) {
             // THE VIDEO IS PLAYED
@@ -107,7 +114,9 @@ export default function YouTubePlaylister() {
         } else if (playerStatus === 5) {
             // THE VIDEO HAS BEEN CUED
             console.log("5 Video cued");
+            loadAndPlayCurrentSong(player);
         }
+
     }
 
     const buttonStyle = {
@@ -126,8 +135,8 @@ export default function YouTubePlaylister() {
             <div id='youtube-section-bottom'>
                 <div id='youtube-section-description'>
                     <div style={{ textAlign: "center", lineHeight: 0 }}><p>Now Playing</p></div>
-                    <p>Playlist: {list}</p>
-                    <p>Song #: {store.currentSongIndex}</p>
+                    <p>Playlist: {list.name}</p>
+                    <p>Song #: {songIndex}</p>
                     <p>Title: {songTitle}</p>
                     <p>Artist: {songArtist}</p>
 

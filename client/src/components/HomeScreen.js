@@ -8,6 +8,7 @@ import YouTubePlaylister from './YouTubePlaylister'
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import HomeBanner from './HomeBanner';
+import CommentsSection from './CommentsSection'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -85,7 +86,8 @@ const HomeScreen = () => {
                         </div>
 
                     </div>
-                    <YouTubePlaylister />
+                    {playerActive ?
+                        <YouTubePlaylister /> : <CommentsSection />}
                 </div>
 
 

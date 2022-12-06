@@ -32,6 +32,7 @@ function ListCard(props) {
     const [selected, setSelected] = useState(false);
 
     function toggleLoadSongs(event, id) {
+        // event.stopPropagation();
         let newActive = !songsActive;
         if (newActive) {
             handleLoadList(event, id);
@@ -60,8 +61,6 @@ function ListCard(props) {
 
     function handleClick(event, id) {
         if (event.detail === 1) {
-
-
             store.loadPlayer(idNamePair._id, 0);
         }
         else if (event.detail === 2 && !songsActive && !isPublished) {
@@ -180,7 +179,7 @@ function ListCard(props) {
             }
 
             songCards =
-                <div>
+                <div onClick={(event) => { event.stopPropagation() }}>
 
                     <List
                         id="playlist-cards"
@@ -215,6 +214,7 @@ function ListCard(props) {
             style={cardStyle}
             button
             onClick={(event) => { handleClick(event, (idNamePair._id)) }}
+            disabled={store.currentModal != "NONE"}
         >
             <Box sx={{ p: 1, flexGrow: 1 }} className={cardStatus}>
                 <Box className="list-card-item1">
