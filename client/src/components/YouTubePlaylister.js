@@ -22,7 +22,7 @@ export default function YouTubePlaylister() {
     // THIS HAS THE YOUTUBE IDS FOR THE SONGS IN OUR PLAYLIST
     let list = store.currentList ? store.currentList : "";
     let playlist = store.currentList ? store.currentList.songs.map((key) => { return key.youTubeId }) : [];
-    let currentSong = store.currentList ? store.currentSongIndex : -1;
+    let currentSong = store.currentList ? 0 : -1;
 
     // THIS IS THE INDEX OF THE SONG CURRENTLY IN USE IN THE PLAYLIST
 
@@ -43,6 +43,12 @@ export default function YouTubePlaylister() {
         let song = playlist[currentSong];
         player.loadVideoById(song);
         player.playVideo();
+
+        console.log(list);
+        if (store.currentList) {
+            setSongTitle(list.songs[currentSong].title);
+            setSongArtist(list.songs[currentSong].artist);
+        }
     }
 
     function playSong() {

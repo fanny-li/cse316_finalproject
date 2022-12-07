@@ -29,7 +29,7 @@ function EditToolbar(props) {
     function handlePublish(event, id) {
         event.stopPropagation();
         store.publishPlaylist(id);
-        handleClose();
+        handleClose(event, id);
     }
 
     async function handleDeleteList(event, id) {
@@ -39,7 +39,7 @@ function EditToolbar(props) {
 
     function handleDuplicatePlaylist(event, id) {
         event.stopPropagation();
-        handleClose();
+        handleClose(event, id);
         store.duplicatePlaylist(id);
     }
 

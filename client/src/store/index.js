@@ -37,7 +37,7 @@ export const GlobalStoreActionType = {
     LIKE_PLAYLIST: "LIKE_PLAYLIST",
     SORT_BY: "SORT_BY",
     LOAD_PLAYER: "LOAD_PLAYER",
-    ADD_COMMENT: "ADD_COMMENT"
+    // ADD_COMMENT: "ADD_COMMENT"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -143,8 +143,8 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.CREATE_NEW_LIST: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    idNamePairs: store.idNamePairs,
-                    currentList: payload,
+                    idNamePairs: payload.idNamePairs,
+                    currentList: payload.newList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter + 1,
@@ -163,7 +163,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal: CurrentModal.NONE,
                     idNamePairs: payload,
-                    currentList: store.currentList,
+                    currentList: null,
                     currentSongIndex: store.currentSongIndex,
                     currentSong: store.currentSong,
                     newListCounter: store.newListCounter,
@@ -511,19 +511,27 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
-        const response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
+        let response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
             tps.clearAllTransactions();
             let newList = response.data.playlist;
-            storeReducer({
-                type: GlobalStoreActionType.CREATE_NEW_LIST,
-                payload: newList
+            response = await api.getPlaylistPairs();
+            if (response.data.success) {
+                let pairsArray = response.data.idNamePairs;
+                console.log(pairsArray);
+                storeReducer({
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
+                    payload: {
+                        idNamePairs: pairsArray,
+                        newList: newList
+                    }
+                }
+                );
+                // store.loadIdNamePairs();
+                // IF IT'S A VALID LIST THEN LET'S START EDITING IT
+                history.push("/playlist/" + newList._id);
             }
-            );
-            store.loadIdNamePairs();
-            // IF IT'S A VALID LIST THEN LET'S START EDITING IT
-            history.push("/playlist/" + newList._id);
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
@@ -870,8 +878,6 @@ function GlobalStoreContextProvider(props) {
             let playlists = list;
             let sortType = type;
 
-            console.log(playlists);
-            console.log(sortType);
             if (playlists.length == 0) {
                 let response = await api.getPlaylists();
                 if (response.data.success) {
@@ -903,10 +909,10 @@ function GlobalStoreContextProvider(props) {
             }
             else if (type === "BY_LISTENS") {
                 if (store.searchByType) {
-                    playlists2.sort((a, b) => a.listens < b.listens ? 1 : -1);
+                    playlists2.sort((a, b) => a.totalPlays < b.totalPlays ? 1 : -1);
                 }
                 else {
-                    playlists.sort((a, b) => a.listens < b.listens ? 1 : -1);
+                    playlists.sort((a, b) => a.totalPlays < b.totalPlays ? 1 : -1);
 
                 }
 
@@ -943,7 +949,6 @@ function GlobalStoreContextProvider(props) {
                 sortType = SortBy.BY_EDIT_DATE;
             }
 
-            console.log(playlists);
             storeReducer({
                 type: GlobalStoreActionType.SORT_BY,
                 payload: {
@@ -962,22 +967,51 @@ function GlobalStoreContextProvider(props) {
     store.loadPlayer = function (id, index) {
         async function asyncLoadPlayer(id, index) {
             let response = await api.getPlaylistById(id);
+
             if (response.data.success) {
                 let playlist = response.data.playlist;
-
                 let song = playlist.songs[index];
-                storeReducer({
-                    type: GlobalStoreActionType.LOAD_PLAYER,
-                    payload: {
-                        playlist: playlist,
-                        index: index,
-                        song: song
-                    }
-                })
 
-                history.push("/");
+                if (playlist.published) {
+                    playlist.totalPlays += 1;
+
+
+                    response = await api.updatePlaylistById(id, playlist);
+                    if (response.data.success) {
+
+                        if (store.searchedLists) {
+                            let newList = store.searchedLists.map((list) => {
+                                return list._id == playlist._id ? playlist : list;
+                            })
+                            store.sortPlaylist(store.sortBy, [], newList, playlist);
+                        }
+                        else {
+                            let pairsArray = store.idNamePairs.map((list) => list._id == playlist._id ? playlist : list);
+                            store.sortPlaylist(store.sortBy, pairsArray, [], playlist);
+                        }
+
+
+                    }
+                }
+                else {
+
+                    storeReducer({
+                        type: GlobalStoreActionType.LOAD_PLAYER,
+                        payload: {
+                            playlist: playlist,
+                            index: index,
+                            song: song
+                        }
+                    })
+
+                    history.push("/");
+                }
+
             }
+
+
         }
+
         asyncLoadPlayer(id, index);
     }
 

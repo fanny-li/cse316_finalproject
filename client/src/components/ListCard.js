@@ -32,10 +32,11 @@ function ListCard(props) {
     const [selected, setSelected] = useState(false);
 
     function toggleLoadSongs(event, id) {
-        // event.stopPropagation();
+        event.stopPropagation();
         let newActive = !songsActive;
         if (newActive) {
             handleLoadList(event, id);
+            console.log("here");
             setSelected(true);
         }
         else {

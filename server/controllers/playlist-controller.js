@@ -149,7 +149,9 @@ getPlaylistPairs = async (req, res) => {
                             likes: list.likes,
                             dislikes: list.dislikes,
                             totalPlays: list.totalPlays,
-                            comments: list.comments
+                            comments: list.comments,
+                            createdAt: list.createdAt,
+                            updatedAt: list.updatedAt
                         };
                         pairs.push(pair);
                     }
