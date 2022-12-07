@@ -353,9 +353,9 @@ function GlobalStoreContextProvider(props) {
                     editSong: null,
                     modalActive: false,
                     publishedPlaylists: store.publishedPlaylists,
-                    searchByType: payload,
+                    searchByType: payload.searchType,
                     searchedText: null,
-                    searchedLists: [],
+                    searchedLists: payload.allLists,
                     sortBy: store.sortBy
                 })
             }
@@ -428,7 +428,7 @@ function GlobalStoreContextProvider(props) {
                     idNamePairs: store.idNamePairs,
                     currentList: payload.playlist,
                     currentSongIndex: payload.index,
-                    currentSong: payload.song,
+                    currentSong: null,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -519,7 +519,6 @@ function GlobalStoreContextProvider(props) {
             response = await api.getPlaylistPairs();
             if (response.data.success) {
                 let pairsArray = response.data.idNamePairs;
-                console.log(pairsArray);
                 storeReducer({
                     type: GlobalStoreActionType.CREATE_NEW_LIST,
                     payload: {
@@ -528,7 +527,6 @@ function GlobalStoreContextProvider(props) {
                     }
                 }
                 );
-                // store.loadIdNamePairs();
                 // IF IT'S A VALID LIST THEN LET'S START EDITING IT
                 history.push("/playlist/" + newList._id);
             }
@@ -630,17 +628,31 @@ function GlobalStoreContextProvider(props) {
     // moveItem, updateItem, updateCurrentList, undo, redo, publish
     store.setCurrentList = function (id) {
         async function asyncSetCurrentList(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-
-                response = await api.updatePlaylistById(playlist._id, playlist);
+            if (auth.guest) {
+                let response = await api.getPlaylists();
                 if (response.data.success) {
+                    let allLists = response.data.data;
+                    let playlist = allLists.filter((list) => { return list._id == id });
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
                     history.push("/playlist/" + playlist._id);
+                }
+            }
+            else {
+                let response = await api.getPlaylistById(id);
+                if (response.data.success) {
+                    let playlist = response.data.playlist;
+
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        storeReducer({
+                            type: GlobalStoreActionType.SET_CURRENT_LIST,
+                            payload: playlist
+                        });
+                        history.push("/playlist/" + playlist._id);
+                    }
                 }
             }
         }
@@ -702,15 +714,20 @@ function GlobalStoreContextProvider(props) {
                 if (response.status === 201) {
                     tps.clearAllTransactions();
                     let newList = response.data.playlist;
-                    storeReducer({
-                        type: GlobalStoreActionType.CREATE_NEW_LIST,
-                        payload: newList
+                    response = await api.getPlaylistPairs();
+                    if (response.data.success) {
+                        let pairsArray = response.data.idNamePairs;
+                        storeReducer({
+                            type: GlobalStoreActionType.CREATE_NEW_LIST,
+                            payload: {
+                                idNamePairs: pairsArray,
+                                newList: newList
+                            }
+                        }
+                        );
+
+                        history.push("/");
                     }
-                    );
-
-                    store.loadIdNamePairs();
-
-                    history.push("/");
                 }
                 else {
                     console.log("API FAILED TO DUPLICATE PLAYLIST");
@@ -722,97 +739,106 @@ function GlobalStoreContextProvider(props) {
 
     store.likePlaylist = function (id) {
         async function asyncLikePlaylist(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-                playlist.likes += 1;
-
-                response = await api.updatePlaylistById(playlist._id, playlist);
+            let playlist = [];
+            if (auth.guest) {
+                let response = await api.getPlaylists();
                 if (response.data.success) {
-                    response = await api.getPlaylistById(id);
-                    if (response.data.success) {
-                        playlist = response.data.playlist;
+                    let allLists = response.data.data;
+                    playlist = allLists.filter((list) => { return list._id == id })[0];
+                }
+            }
+            else {
+                let response = await api.getPlaylistById(id);
 
-                        let newList = store.searchedLists.map((list) => {
-                            return list._id == playlist._id ? playlist : list;
-                        })
-
-                        let pairsArray = store.idNamePairs.map((list) => list._id == playlist._id ? playlist : list);
-
-                        store.sortPlaylist(store.sortBy, pairsArray, newList);
-                        // response = await api.getPlaylistPairs();
-                        // if (response.data.success) {
-                        //     let pairsArray = response.data.idNamePairs;
-
-                        //     storeReducer({
-                        //         type: GlobalStoreActionType.LIKE_PLAYLIST,
-                        //         payload: {
-                        //             idNamePairs: pairsArray,
-                        //             searchedLists: newList
-                        //         }
-                        //     })
-
-                        //     history.push("/");
-                        // }
-
-
-
-                    }
-
+                if (response.data.success) {
+                    playlist = response.data.playlist;
 
                 }
             }
+
+            playlist.likes += 1;
+
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success) {
+                if (store.searchedLists) {
+                    let newList = store.searchedLists.map((list) => {
+                        return list._id === playlist._id ? playlist : list;
+                    })
+                    store.sortPlaylist(store.sortBy, [], newList, playlist);
+                }
+                else {
+                    let pairsArray = store.idNamePairs.map((list) => list._id === playlist._id ? playlist : list);
+                    store.sortPlaylist(store.sortBy, pairsArray, [], playlist);
+                }
+
+
+            }
+
         }
         asyncLikePlaylist(id);
     }
     store.dislikePlaylist = function (id) {
         async function asyncDislikePlaylist(id) {
-            let response = await api.getPlaylistById(id);
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-                playlist.dislikes += 1;
-
-                response = await api.updatePlaylistById(playlist._id, playlist);
+            let playlist = [];
+            if (auth.guest) {
+                let response = await api.getPlaylists();
                 if (response.data.success) {
-                    response = await api.getPlaylistById(id);
-                    if (response.data.success) {
-                        playlist = response.data.playlist;
-
-
-                        let newList = store.searchedLists.map((list) => {
-                            return list._id == playlist._id ? playlist : list;
-                        })
-                        let pairsArray = store.idNamePairs.map((list) => list._id == playlist._id ? playlist : list);
-
-                        store.sortPlaylist(store.sortBy, pairsArray, newList);
-                        // response = await api.getPlaylistPairs();
-                        // if (response.data.success) {
-                        //     let pairsArray = response.data.idNamePairs;
-                        //     storeReducer({
-                        //         type: GlobalStoreActionType.LIKE_PLAYLIST,
-                        //         payload: {
-                        //             idNamePairs: pairsArray,
-                        //             searchedLists: newList
-                        //         }
-                        //     })
-
-                        //     history.push("/");
-                        // }
-                    }
+                    let allLists = response.data.data;
+                    playlist = allLists.filter((list) => { return list._id == id })[0];
                 }
             }
+            else {
+                let response = await api.getPlaylistById(id);
+
+                if (response.data.success) {
+                    playlist = response.data.playlist;
+
+                }
+            }
+
+            playlist.dislikes += 1;
+
+            let response = await api.updatePlaylistById(playlist._id, playlist);
+            if (response.data.success) {
+                if (store.searchedLists) {
+                    let newList = store.searchedLists.map((list) => {
+                        return list._id === playlist._id ? playlist : list;
+                    })
+                    store.sortPlaylist(store.sortBy, [], newList, playlist);
+                }
+                else {
+                    let pairsArray = store.idNamePairs.map((list) => list._id === playlist._id ? playlist : list);
+                    store.sortPlaylist(store.sortBy, pairsArray, [], playlist);
+                }
+
+
+            }
+
         }
         asyncDislikePlaylist(id);
     }
 
     store.setSearchByType = function (searchType) {
         async function asyncSetSearchByType(searchType) {
-            storeReducer({
-                type: GlobalStoreActionType.SEARCH_BY_TYPE,
-                payload: searchType
-            })
 
-            history.push("/");
+            let response = await api.getPlaylists();
+            if (response.data.success) {
+                let playlists = response.data.data;
+                const filteredList = playlists.filter(playlist => {
+                    return playlist.published;
+                })
+
+                storeReducer({
+                    type: GlobalStoreActionType.SEARCH_BY_TYPE,
+                    payload: {
+                        allLists: filteredList,
+                        searchType: searchType
+                    }
+                })
+
+                history.push("/");
+            }
+
         }
         asyncSetSearchByType(searchType);
     }
@@ -825,7 +851,10 @@ function GlobalStoreContextProvider(props) {
                 if (text === "") {
                     storeReducer({
                         type: GlobalStoreActionType.SEARCHED_LISTS,
-                        payload: []
+                        payload: {
+                            text: null,
+                            list: []
+                        }
                     })
                 }
                 else if (type === "allLists") {
@@ -878,10 +907,12 @@ function GlobalStoreContextProvider(props) {
             let playlists = list;
             let sortType = type;
 
-            if (playlists.length == 0) {
-                let response = await api.getPlaylists();
-                if (response.data.success) {
-                    playlists = response.data.data.filter((playlist) => playlist.ownerUserName === auth.user.userName);
+            if (!auth.guest) {
+                if (playlists.length == 0) {
+                    let response = await api.getPlaylists();
+                    if (response.data.success) {
+                        playlists = response.data.data.filter((playlist) => playlist.ownerUserName === auth.user.userName);
+                    }
                 }
             }
 
@@ -966,48 +997,53 @@ function GlobalStoreContextProvider(props) {
 
     store.loadPlayer = function (id, index) {
         async function asyncLoadPlayer(id, index) {
-            let response = await api.getPlaylistById(id);
-
-            if (response.data.success) {
-                let playlist = response.data.playlist;
-                let song = playlist.songs[index];
-
-                if (playlist.published) {
-                    playlist.totalPlays += 1;
-
-
-                    response = await api.updatePlaylistById(id, playlist);
-                    if (response.data.success) {
-
-                        if (store.searchedLists) {
-                            let newList = store.searchedLists.map((list) => {
-                                return list._id == playlist._id ? playlist : list;
-                            })
-                            store.sortPlaylist(store.sortBy, [], newList, playlist);
-                        }
-                        else {
-                            let pairsArray = store.idNamePairs.map((list) => list._id == playlist._id ? playlist : list);
-                            store.sortPlaylist(store.sortBy, pairsArray, [], playlist);
-                        }
-
-
-                    }
+            let playlist = [];
+            if (auth.guest) {
+                let response = await api.getPlaylists();
+                if (response.data.success) {
+                    let allLists = response.data.data;
+                    playlist = allLists.filter((list) => { return list._id == id })[0];
                 }
-                else {
-
-                    storeReducer({
-                        type: GlobalStoreActionType.LOAD_PLAYER,
-                        payload: {
-                            playlist: playlist,
-                            index: index,
-                            song: song
-                        }
-                    })
-
-                    history.push("/");
-                }
-
             }
+            else {
+                let response = await api.getPlaylistById(id);
+
+                if (response.data.success) {
+                    playlist = response.data.playlist;
+
+                }
+            }
+
+            if (playlist.published) {
+                playlist.totalPlays += 1;
+
+                let response = await api.updatePlaylistById(id, playlist);
+                if (response.data.success) {
+                    if (store.searchedLists) {
+                        let newList = store.searchedLists.map((list) => {
+                            return list._id === playlist._id ? playlist : list;
+                        })
+                        store.sortPlaylist(store.sortBy, [], newList, playlist);
+                    }
+                    else {
+                        let pairsArray = store.idNamePairs.map((list) => list._id === playlist._id ? playlist : list);
+                        store.sortPlaylist(store.sortBy, pairsArray, [], playlist);
+                    }
+
+
+                }
+            }
+            else {
+
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_PLAYER,
+                    payload: {
+                        playlist: playlist,
+                        index: index,
+                    }
+                })
+            }
+            history.push("/");
 
 
         }

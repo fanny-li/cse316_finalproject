@@ -1,10 +1,6 @@
 import { useContext } from 'react'
 import { GlobalStoreContext } from '../store'
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import RedoIcon from '@mui/icons-material/Redo';
-import UndoIcon from '@mui/icons-material/Undo';
-import CloseIcon from '@mui/icons-material/HighlightOff';
+import AuthContext from '../auth';
 
 /*
     This toolbar is a functional React component that
@@ -14,6 +10,7 @@ import CloseIcon from '@mui/icons-material/HighlightOff';
 */
 function EditToolbar(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const { idNamePair, handleClose } = props;
 
     function handleAddNewSong() {
@@ -63,7 +60,8 @@ function EditToolbar(props) {
                     {!idNamePair.published ?
                         <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button> : <div></div>}
                     <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
-                    <button id='duplicate-button' className="edit-toolbar-button" onClick={(event) => { handleDuplicatePlaylist(event, idNamePair._id) }} >Duplicate</button>
+                    {!auth.guest ?
+                        <button id='duplicate-button' className="edit-toolbar-button" onClick={(event) => { handleDuplicatePlaylist(event, idNamePair._id) }} >Duplicate</button> : null}
                 </div>
             </div>
 

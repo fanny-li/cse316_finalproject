@@ -11,7 +11,8 @@ export const AuthActionType = {
     LOGIN_USER: "LOGIN_USER",
     LOGOUT_USER: "LOGOUT_USER",
     REGISTER_USER: "REGISTER_USER",
-    CLOSE_ALERT: "CLOSE_ALERT"
+    CLOSE_ALERT: "CLOSE_ALERT",
+    GUEST_LOGIN: "GUEST_LOGIN"
 }
 
 function AuthContextProvider(props) {
@@ -19,7 +20,8 @@ function AuthContextProvider(props) {
         user: null,
         loggedIn: false,
         hasAlert: false,
-        alertMessage: null
+        alertMessage: null,
+        guest: false
     });
     const history = useHistory();
 
@@ -34,27 +36,30 @@ function AuthContextProvider(props) {
                 return setAuth({
                     user: payload.user,
                     loggedIn: payload.loggedIn,
-                    hasAlert: false
+                    hasAlert: false,
                 });
             }
             case AuthActionType.LOGIN_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    hasAlert: false
+                    hasAlert: false,
+                    guest: false
                 })
             }
             case AuthActionType.LOGOUT_USER: {
                 return setAuth({
                     user: null,
-                    loggedIn: false
+                    loggedIn: false,
+                    guest: false
                 })
             }
             case AuthActionType.REGISTER_USER: {
                 return setAuth({
                     user: payload.user,
                     loggedIn: true,
-                    hasAlert: false
+                    hasAlert: false,
+                    guest: false
                 })
             }
             case AuthActionType.SHOW_ALERT: {
@@ -67,6 +72,15 @@ function AuthContextProvider(props) {
                 return setAuth({
                     hasAlert: false,
                     alertMessage: null
+                })
+            }
+            case AuthActionType.GUEST_LOGIN: {
+                return setAuth({
+                    user: null,
+                    loggedIn: true,
+                    hasAlert: false,
+                    alertMessage: null,
+                    guest: true
                 })
             }
             default:
@@ -166,6 +180,12 @@ function AuthContextProvider(props) {
         })
     }
 
+    auth.guestLogin = async function () {
+        authReducer({
+            type: AuthActionType.GUEST_LOGIN,
+            payload: {}
+        })
+    }
     return (
         <AuthContext.Provider value={{
             auth

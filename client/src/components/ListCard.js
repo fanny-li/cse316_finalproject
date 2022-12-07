@@ -91,10 +91,12 @@ function ListCard(props) {
     }
 
     function handleLikePlaylist(event, id) {
+        event.stopPropagation();
         store.likePlaylist(id);
     }
 
     function handleDislikePlaylist(event, id) {
+        event.stopPropagation();
         store.dislikePlaylist(id);
     }
 

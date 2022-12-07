@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
+import AuthContext from '../auth'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import YouTubePlaylister from './YouTubePlaylister'
@@ -16,11 +17,14 @@ import CommentsSection from './CommentsSection'
 */
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const [playerActive, setPlayerActive] = useState(true);
     const [commentsActive, setCommentsActive] = useState(false);
 
     useEffect(() => {
-        store.loadIdNamePairs();
+        if (!auth.guest) {
+            store.loadIdNamePairs();
+        }
     }, []);
 
     function loadPlayerSection(event) {
@@ -35,13 +39,12 @@ const HomeScreen = () => {
     let listCard = "";
     if (store) {
         listCard =
-            store.searchByType ? <List sx={{ width: '90%', left: '5%' }}>
+            store.searchByType || auth.guest ? <List sx={{ width: '90%', left: '5%' }}>
                 {
                     store.searchedLists.map((pair) => (
                         <ListCard
                             key={pair._id}
                             idNamePair={pair}
-
                             isPublished={pair.published}
 
                         />

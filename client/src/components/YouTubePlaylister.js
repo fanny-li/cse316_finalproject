@@ -44,7 +44,6 @@ export default function YouTubePlaylister() {
         player.loadVideoById(song);
         player.playVideo();
 
-        console.log(list);
         if (store.currentList) {
             setSongTitle(list.songs[currentSong].title);
             setSongArtist(list.songs[currentSong].artist);

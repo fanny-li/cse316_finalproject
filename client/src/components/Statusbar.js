@@ -29,7 +29,7 @@ function Statusbar() {
             text = store.searchedText + " Playlists";
         }
     }
-    else {
+    else if (!auth.guest) {
         text = "Your Lists"
     }
 
@@ -37,13 +37,15 @@ function Statusbar() {
     if (auth.loggedIn) {
         return (
             <div id="playlister-statusbar">
-                <IconButton
+                {!auth.guest ?
+                    <IconButton
 
-                    id="add-list-button"
-                    onClick={handleCreateNewList}
-                >
-                    <AddOutlinedIcon style={{ fontSize: '30pt', color: 'black' }} />
-                </IconButton>
+                        id="add-list-button"
+                        onClick={handleCreateNewList}
+                    >
+                        <AddOutlinedIcon style={{ fontSize: '30pt', color: 'black' }} />
+                    </IconButton> : null
+                }
 
                 <Typography variant="h4">{text}</Typography>
             </div>

@@ -35,12 +35,18 @@ export default function AppBanner() {
         handleMenuClose();
         auth.logoutUser();
         store.newListCounter = 0;
+        store.closeCurrentList();
     }
 
     const handleCloseList = () => {
         store.closeCurrentList();
     }
 
+    const handleGuestLogin = () => {
+        handleMenuClose();
+        auth.guestLogin();
+
+    }
 
 
     const menuId = 'primary-search-account-menu';
@@ -74,7 +80,7 @@ export default function AppBanner() {
 
             <MenuItem style={menuItemStyle} onClick={handleMenuClose}><Link style={menuItemTextStyle} to='/login/'>Login</Link></MenuItem>
             <MenuItem style={menuItemStyle} onClick={handleMenuClose}><Link style={menuItemTextStyle} to='/register/'>Create New Account</Link></MenuItem>
-            <MenuItem style={menuItemStyle}><Link style={menuItemTextStyle}>Continue as Guest</Link></MenuItem>
+            <MenuItem style={menuItemStyle} onClick={handleGuestLogin}><Link style={menuItemTextStyle} to='/'>Continue as Guest</Link></MenuItem>
 
         </Menu>
 
@@ -125,13 +131,24 @@ export default function AppBanner() {
         borderRadius: "80%",
 
     }
+
+    const guestStyle = {
+        color: "purple",
+        fontFamily: "Robaaaoto",
+    }
     function getAccountMenu(loggedIn) {
-        let userInitials = auth.getUserInitials();
+        let userInitials = "";
+        if (auth.guest) {
+            userInitials = "Guest";
+        }
+        else {
+            userInitials = auth.getUserInitials();
+        }
         console.log("userInitials: " + userInitials);
         if (loggedIn)
-            return <div onClick={() => console.log("here")} style={initialsStyle}>{userInitials}</div>;
+            return <div onClick={() => console.log("here")} style={auth.guest ? guestStyle : initialsStyle}>{userInitials}</div>;
         else
-            return <AccountCircle />;
+            return <AccountCircle style={{ color: "purple" }} />;
     }
 
     return (
