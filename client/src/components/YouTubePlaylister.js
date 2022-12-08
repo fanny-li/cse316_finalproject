@@ -47,7 +47,7 @@ export default function YouTubePlaylister() {
 
         console.log("HERE: " + currentSong);
         setSongIndex(currentSong);
-        if (store.currentList) {
+        if (store.currentList && list.songs.length !== 0) {
             setSongTitle(list.songs[currentSong].title);
             setSongArtist(list.songs[currentSong].artist);
         }

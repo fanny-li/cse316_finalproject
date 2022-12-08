@@ -36,7 +36,8 @@ export const GlobalStoreActionType = {
     SEARCHED_LISTS: "SEARCHED_LISTS",
     SORT_BY: "SORT_BY",
     LOAD_PLAYER: "LOAD_PLAYER",
-    RENAME_ERROR: "RENAME_ERROR"
+    RENAME_ERROR: "RENAME_ERROR",
+    LOAD_ALL_LISTS: "LOAD_ALL_LISTS"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -443,6 +444,27 @@ function GlobalStoreContextProvider(props) {
                     sortBy: store.sortBy
                 })
             }
+            case GlobalStoreActionType.LOAD_ALL_LISTS: {
+                return setStore({
+                    currentModal: CurrentModal.NONE,
+                    idNamePairs: null,
+                    currentList: null,
+                    currentSongIndex: null,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: false,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    songMarkedForDeletion: null,
+                    editSong: null,
+                    modalActive: false,
+                    publishedPlaylists: store.publishedPlaylists,
+                    searchByType: store.searchByType,
+                    searchedText: store.searchedText,
+                    searchedLists: payload,
+                    sortBy: store.sortBy
+                })
+            }
             default:
                 return store;
         }
@@ -554,7 +576,21 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
-
+    store.loadAllPlaylists = function () {
+        async function asyncLoadAllPlaylists() {
+            const response = await api.getPlaylists();
+            if (response.data.success) {
+                let playlists = response.data.data.filter((list) => {
+                    return list.published;
+                });
+                storeReducer({
+                    type: GlobalStoreActionType.LOAD_ALL_LISTS,
+                    payload: playlists
+                })
+            }
+        }
+        asyncLoadAllPlaylists();
+    }
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,

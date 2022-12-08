@@ -26,6 +26,9 @@ const HomeScreen = () => {
         if (!auth.guest) {
             store.loadIdNamePairs();
         }
+        else {
+            store.loadAllPlaylists();
+        }
     }, []);
 
     function loadPlayerSection(event) {

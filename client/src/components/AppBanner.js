@@ -123,9 +123,9 @@ export default function AppBanner() {
 
     const initialsStyle = {
         zIndex: 1,
-        color: "black",
+        color: "#7f154e",
         width: 30,
-        backgroundColor: "#BF40BF",
+        backgroundColor: "#d598c0",
         padding: 5,
         border: "2pt solid black",
         borderRadius: "80%",
@@ -133,7 +133,7 @@ export default function AppBanner() {
     }
 
     const guestStyle = {
-        color: "purple",
+        color: "#d598c0",
         fontFamily: "Robaaaoto",
     }
     function getAccountMenu(loggedIn) {

@@ -38,13 +38,11 @@ function ListCard(props) {
             if (store.currentList) {
                 if (store.currentList._id === id) {
                     handleLoadList(event, id);
-                    setSelected(true);
                 }
                 else {
                     console.log("HERE");
                     store.closeCurrentList();
                     handleLoadList(event, id);
-                    setSelected(false);
                 }
             }
             else {
@@ -63,7 +61,6 @@ function ListCard(props) {
     function handleLoadList(event, id) {
         event.stopPropagation();
         console.log("handleLoadList for " + id);
-        console.log(store.currentList);
         if (!event.target.disabled) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
@@ -79,6 +76,7 @@ function ListCard(props) {
     function handleClick(event, id) {
         if (event.detail === 1) {
             store.loadPlayer(idNamePair._id, 0);
+            setSelected(true);
         }
         else if (event.detail === 2 && !songsActive && !isPublished) {
             toggleEdit();
@@ -97,7 +95,7 @@ function ListCard(props) {
             let id = event.target.id.substring("list-".length);
             if (text !== "") {
                 // check to see if newname is unique
-                let playlists = store.idNamePairs.filter((list) => { return list.name === text });
+                let playlists = store.idNamePairs.filter((list) => { return list.name === text && list._id !== id });
                 if (playlists.length !== 0) {
                     store.showRenameErrorModal();
                 }
@@ -173,14 +171,16 @@ function ListCard(props) {
             background: "#BBBEFE",
         }
     }
-    if (selected && isPublished) {
-        cardStyle = {
-            width: '100%',
-            fontSize: '18pt',
-            borderRadius: 10,
-            border: "2px solid black",
-            boxShadow: "5px 3px 3px #dbdbdb",
-            background: "#d598c0",
+    if (store.currentList != null) {
+        if (selected && isPublished && store.currentList._id === idNamePair._id) {
+            cardStyle = {
+                width: '100%',
+                fontSize: '18pt',
+                borderRadius: 10,
+                border: "2px solid black",
+                boxShadow: "5px 3px 3px #dbdbdb",
+                background: "#d598c0",
+            }
         }
     }
 
@@ -188,49 +188,50 @@ function ListCard(props) {
 
     let songCards = "";
 
-    if (songsActive) {
-        if (store.currentList == null) {
-            // store.history.push("/");
-            return null;
-        }
-        else {
-
-            let modalJSX = "";
-            if (store.isEditSongModalOpen()) {
-                modalJSX = <MUIEditSongModal />;
+    if (store.currentList != null) {
+        if (songsActive && store.currentList._id === idNamePair._id) {
+            if (store.currentList == null) {
+                // store.history.push("/");
+                return null;
             }
-            else if (store.isRemoveSongModalOpen()) {
-                modalJSX = <MUIRemoveSongModal />;
+            else {
+
+                let modalJSX = "";
+                if (store.isEditSongModalOpen()) {
+                    modalJSX = <MUIEditSongModal />;
+                }
+                else if (store.isRemoveSongModalOpen()) {
+                    modalJSX = <MUIRemoveSongModal />;
+                }
+
+                songCards =
+                    <div onClick={(event) => { event.stopPropagation() }}>
+
+                        <List
+                            id="playlist-cards"
+                            sx={{ width: '100%' }}
+                            className={isPublished ? "song-card-container-published" : "song-card-container-unpublished"}
+                        >
+                            {store.currentList.songs.map((song, index) => (
+                                <SongCard
+                                    id={'playlist-song-' + (index)}
+                                    key={'playlist-song-' + (index)}
+                                    index={index}
+                                    song={song}
+                                    isPublished={isPublished}
+                                />
+                            ))
+                            }
+
+                        </List>
+                        <EditToolbar idNamePair={idNamePair} handleClose={toggleLoadSongs} />
+                        {modalJSX}
+                    </div>
+
             }
 
-            songCards =
-                <div onClick={(event) => { event.stopPropagation() }}>
-
-                    <List
-                        id="playlist-cards"
-                        sx={{ width: '100%' }}
-                        className={isPublished ? "song-card-container-published" : "song-card-container-unpublished"}
-                    >
-                        {store.currentList.songs.map((song, index) => (
-                            <SongCard
-                                id={'playlist-song-' + (index)}
-                                key={'playlist-song-' + (index)}
-                                index={index}
-                                song={song}
-                                isPublished={isPublished}
-                            />
-                        ))
-                        }
-
-                    </List>
-                    <EditToolbar idNamePair={idNamePair} handleClose={toggleLoadSongs} />
-                    {modalJSX}
-                </div>
-
         }
-
     }
-
     let cardElement =
         <ListItem
             id={idNamePair._id}
