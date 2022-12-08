@@ -58,12 +58,6 @@ function SongCard(props) {
             onClick={handleClick}
         >
             {index + 1}. <p style={{ display: "inline" }}>{song.title} by {song.artist}</p>
-            {/* <a
-                id={'song-' + index + '-link'}
-                className="song-link"
-                href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
-                {song.title} by {song.artist}
-            </a> */}
             {!isPublished ?
                 <input
                     type="button"

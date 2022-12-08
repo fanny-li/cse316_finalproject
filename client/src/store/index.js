@@ -342,7 +342,7 @@ function GlobalStoreContextProvider(props) {
             case GlobalStoreActionType.SEARCH_BY_TYPE: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
-                    idNamePairs: null,
+                    idNamePairs: store.idNamePairs,
                     currentList: null,
                     currentSongIndex: -1,
                     currentSong: null,
@@ -533,6 +533,21 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled" + store.newListCounter;
+        let list = store.idNamePairs.filter((list) => {
+            return list.name === newListName || list.name.slice(0, -1) === newListName;
+        })
+        console.log(list);
+        if (list.length !== 0) {
+            let lastchar = list[list.length - 1].name.slice(-1);
+            if (lastchar >= '0' && lastchar <= '9') {
+                let number = Number(lastchar);
+                number += 1;
+                newListName = newListName.slice(0, -1) + number;
+            }
+            else {
+                newListName = newListName + 1;
+            }
+        }
         let response = await api.createPlaylist(newListName, [], auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
         console.log("createNewList response: " + response);
         if (response.status === 201) {
@@ -755,7 +770,25 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
 
-                response = await api.createPlaylist(playlist.name, playlist.songs, auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
+                let name = playlist.name;
+                let list = store.idNamePairs.filter((list) => {
+                    return list.name === name || list.name.slice(0, -1) === name;
+                })
+                console.log(list);
+                if (list.length !== 0) {
+                    let lastchar = list[list.length - 1].name.slice(-1);
+                    console.log(lastchar);
+                    if (lastchar >= '0' && lastchar <= '9') {
+                        let number = Number(lastchar);
+                        number += 1;
+                        name = name.slice(0, -1) + number;
+                        console.log(name);
+                    }
+                    else {
+                        name = name + 1;
+                    }
+                }
+                response = await api.createPlaylist(name, playlist.songs, auth.user.email, auth.user.userName, false, 0, 0, 0, 0, []);
                 if (response.status === 201) {
                     tps.clearAllTransactions();
                     let newList = response.data.playlist;
