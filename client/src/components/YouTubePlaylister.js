@@ -6,6 +6,7 @@ import StopIcon from '@mui/icons-material/Stop';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import GlobalStoreContext from '../store';
+import { useEffect } from 'react';
 
 export default function YouTubePlaylister() {
     // THIS EXAMPLE DEMONSTRATES HOW TO DYNAMICALLY MAKE A
@@ -44,6 +45,8 @@ export default function YouTubePlaylister() {
         player.loadVideoById(song);
         player.playVideo();
 
+        console.log("HERE: " + currentSong);
+        setSongIndex(currentSong);
         if (store.currentList) {
             setSongTitle(list.songs[currentSong].title);
             setSongArtist(list.songs[currentSong].artist);

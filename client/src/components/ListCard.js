@@ -35,9 +35,23 @@ function ListCard(props) {
         event.stopPropagation();
         let newActive = !songsActive;
         if (newActive) {
-            handleLoadList(event, id);
-            console.log("here");
-            setSelected(true);
+            if (store.currentList) {
+                if (store.currentList._id === id) {
+                    handleLoadList(event, id);
+                    setSelected(true);
+                }
+                else {
+                    console.log("HERE");
+                    store.closeCurrentList();
+                    handleLoadList(event, id);
+                    setSelected(false);
+                }
+            }
+            else {
+                handleLoadList(event, id);
+                setSelected(true);
+            }
+
         }
         else {
             store.closeCurrentList();
@@ -47,7 +61,9 @@ function ListCard(props) {
     }
 
     function handleLoadList(event, id) {
+        event.stopPropagation();
         console.log("handleLoadList for " + id);
+        console.log(store.currentList);
         if (!event.target.disabled) {
             let _id = event.target.id;
             if (_id.indexOf('list-card-text-') >= 0)
@@ -84,8 +100,6 @@ function ListCard(props) {
                 let playlists = store.idNamePairs.filter((list) => { return list.name === text });
                 if (playlists.length !== 0) {
                     store.showRenameErrorModal();
-                    // toggleEdit();
-                    console.log("HERE3");
                 }
                 else {
                     store.changeListName(id, text);

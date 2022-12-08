@@ -279,6 +279,7 @@ body {
 #edit-toolbar-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin-top: 10pt;
 }
 
 #edit-toolbar-right {

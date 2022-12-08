@@ -407,7 +407,7 @@ function GlobalStoreContextProvider(props) {
                     idNamePairs: store.idNamePairs,
                     currentList: payload.playlist,
                     currentSongIndex: payload.index,
-                    currentSong: null,
+                    currentSong: payload.song,
                     newListCounter: store.newListCounter,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
@@ -619,7 +619,6 @@ function GlobalStoreContextProvider(props) {
         });
     }
     store.isRenameErrorModalOpen = () => {
-        console.log("HERERERER");
         return store.currentModal == CurrentModal.RENAME_ERROR;
     }
     store.isDeleteListModalOpen = () => {
@@ -642,7 +641,7 @@ function GlobalStoreContextProvider(props) {
                 let response = await api.getPlaylists();
                 if (response.data.success) {
                     let allLists = response.data.data;
-                    let playlist = allLists.filter((list) => { return list._id == id });
+                    let playlist = allLists.filter((list) => { return list._id == id })[0];
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
@@ -1024,6 +1023,8 @@ function GlobalStoreContextProvider(props) {
                 }
             }
 
+            let song = playlist.songs[0];
+
             if (playlist.published) {
                 playlist.totalPlays += 1;
 
@@ -1050,6 +1051,7 @@ function GlobalStoreContextProvider(props) {
                     payload: {
                         playlist: playlist,
                         index: index,
+                        song: song
                     }
                 })
             }

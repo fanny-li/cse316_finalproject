@@ -59,7 +59,8 @@ function EditToolbar(props) {
                 <div id="edit-toolbar-right">
                     {!idNamePair.published ?
                         <button id='publish-button' className="edit-toolbar-button" onClick={(event) => handlePublish(event, idNamePair._id)}>Publish</button> : <div></div>}
-                    <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button>
+                    {!auth.guest && idNamePair.ownerUserName === auth.user.userName ?
+                        <button id='delete-list-button' className="edit-toolbar-button" onClick={(event) => handleDeleteList(event, idNamePair._id)} >Delete</button> : null}
                     {!auth.guest ?
                         <button id='duplicate-button' className="edit-toolbar-button" onClick={(event) => { handleDuplicatePlaylist(event, idNamePair._id) }} >Duplicate</button> : null}
                 </div>
