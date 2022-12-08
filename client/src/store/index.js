@@ -34,10 +34,9 @@ export const GlobalStoreActionType = {
     HIDE_MODALS: "HIDE_MODALS",
     SEARCH_BY_TYPE: "SEARCH_BY_TYPE",
     SEARCHED_LISTS: "SEARCHED_LISTS",
-    LIKE_PLAYLIST: "LIKE_PLAYLIST",
     SORT_BY: "SORT_BY",
     LOAD_PLAYER: "LOAD_PLAYER",
-    // ADD_COMMENT: "ADD_COMMENT"
+    RENAME_ERROR: "RENAME_ERROR"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -47,7 +46,8 @@ const CurrentModal = {
     NONE: "NONE",
     DELETE_LIST: "DELETE_LIST",
     EDIT_SONG: "EDIT_SONG",
-    REMOVE_SONG: "REMOVE_SONG"
+    REMOVE_SONG: "REMOVE_SONG",
+    RENAME_ERROR: "RENAME_ERROR"
 }
 
 const SortBy = {
@@ -380,27 +380,6 @@ function GlobalStoreContextProvider(props) {
                     sortBy: store.sortBy
                 })
             }
-            case GlobalStoreActionType.LIKE_PLAYLIST: {
-                return setStore({
-                    currentModal: CurrentModal.NONE,
-                    idNamePairs: payload.idNamePairs,
-                    currentList: null,
-                    currentSongIndex: -1,
-                    currentSong: null,
-                    newListCounter: store.newListCounter,
-                    listNameActive: false,
-                    listIdMarkedForDeletion: null,
-                    listMarkedForDeletion: null,
-                    songMarkedForDeletion: null,
-                    editSong: null,
-                    modalActive: false,
-                    publishedPlaylists: store.publishedPlaylists,
-                    searchByType: store.searchByType,
-                    searchedText: store.searchedText,
-                    searchedLists: payload.searchedLists,
-                    sortBy: store.sortBy
-                })
-            }
             case GlobalStoreActionType.SORT_BY: {
                 return setStore({
                     currentModal: CurrentModal.NONE,
@@ -436,6 +415,27 @@ function GlobalStoreContextProvider(props) {
                     songMarkedForDeletion: null,
                     editSong: null,
                     modalActive: false,
+                    publishedPlaylists: store.publishedPlaylists,
+                    searchByType: store.searchByType,
+                    searchedText: store.searchedText,
+                    searchedLists: store.searchedLists,
+                    sortBy: store.sortBy
+                })
+            }
+            case GlobalStoreActionType.RENAME_ERROR: {
+                return setStore({
+                    currentModal: CurrentModal.RENAME_ERROR,
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    currentSongIndex: null,
+                    currentSong: null,
+                    newListCounter: store.newListCounter,
+                    listNameActive: true,
+                    listIdMarkedForDeletion: null,
+                    listMarkedForDeletion: null,
+                    songMarkedForDeletion: null,
+                    editSong: null,
+                    modalActive: true,
                     publishedPlaylists: store.publishedPlaylists,
                     searchByType: store.searchByType,
                     searchedText: store.searchedText,
@@ -593,7 +593,13 @@ function GlobalStoreContextProvider(props) {
     }
     // THIS FUNCTION SHOWS THE MODAL FOR PROMPTING THE USER
     // TO SEE IF THEY REALLY WANT TO DELETE THE LIST
-
+    store.showRenameErrorModal = () => {
+        console.log("show modal function");
+        storeReducer({
+            type: GlobalStoreActionType.RENAME_ERROR,
+            payload: {}
+        })
+    }
     store.showEditSongModal = (songIndex, songToEdit) => {
         storeReducer({
             type: GlobalStoreActionType.EDIT_SONG,
@@ -611,6 +617,10 @@ function GlobalStoreContextProvider(props) {
             type: GlobalStoreActionType.HIDE_MODALS,
             payload: {}
         });
+    }
+    store.isRenameErrorModalOpen = () => {
+        console.log("HERERERER");
+        return store.currentModal == CurrentModal.RENAME_ERROR;
     }
     store.isDeleteListModalOpen = () => {
         return store.currentModal === CurrentModal.DELETE_LIST;

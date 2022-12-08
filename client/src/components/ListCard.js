@@ -80,10 +80,18 @@ function ListCard(props) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
             if (text !== "") {
-                store.changeListName(id, text);
-
+                // check to see if newname is unique
+                let playlists = store.idNamePairs.filter((list) => { return list.name === text });
+                if (playlists.length !== 0) {
+                    store.showRenameErrorModal();
+                    // toggleEdit();
+                    console.log("HERE3");
+                }
+                else {
+                    store.changeListName(id, text);
+                    toggleEdit();
+                }
             }
-            toggleEdit();
         }
     }
     function handleUpdateText(event) {

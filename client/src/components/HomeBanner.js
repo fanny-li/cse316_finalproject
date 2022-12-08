@@ -80,7 +80,7 @@ const HomeBanner = (props) => {
     }
     const disabledButton = {
         fontSize: '30pt',
-        color: 'gray',
+        color: 'lightgray',
         cursor: "not-allowed"
     }
 

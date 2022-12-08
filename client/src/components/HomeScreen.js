@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography'
 import HomeBanner from './HomeBanner';
 import CommentsSection from './CommentsSection'
+import MUIRenameErrorModal from './MUIRenameErrorModal'
 /*
     This React component lists all the top5 lists in the UI.
     
@@ -66,6 +67,14 @@ const HomeScreen = () => {
                 </List>;
     }
 
+    let modal = "";
+    if (store.isDeleteListModalOpen()) {
+        modal = <MUIDeleteModal />
+    }
+    else if (store.isRenameErrorModalOpen()) {
+        console.log("HERE");
+        modal = <MUIRenameErrorModal />
+    }
     return (
         <div id="home-screen-root">
             <HomeBanner
@@ -76,7 +85,7 @@ const HomeScreen = () => {
                         {
                             listCard
                         }
-                        <MUIDeleteModal />
+                        {modal}
                     </div>
                 </div>
                 <div id="youtube-section">

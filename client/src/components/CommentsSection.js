@@ -43,7 +43,7 @@ const CommentsSection = () => {
             </div>
             <div id="add-comment-section">
                 <div style={{ width: "100%" }} >
-                    <input type="text" name="comments" id="comment-search-field" className={store.currentList && store.currentList.published ? "" : "disabled"} placeholder="Add Comment" ref={ref} onChange={handleUpdateText} onKeyDown={handleAddComment} disabled={store.currentList && store.currentList.published ? false : true} />
+                    <input type="text" name="comments" id="comment-search-field" className={store.currentList && store.currentList.published && !auth.guest ? "" : "disabled"} placeholder="Add Comment" ref={ref} onChange={handleUpdateText} onKeyDown={handleAddComment} disabled={store.currentList && store.currentList.published && !auth.guest ? false : true} />
                 </div>
             </div>
         </div>
